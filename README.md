@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DevPortfolio
 
-## Getting Started
+A modern, dynamic portfolio website built with **Next.js 16** and **React 19**, featuring a **Google Sheets Headless CMS** for easy content management.
 
-First, run the development server:
+## 🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Modern Tech Stack**: Built with Next.js 16 (App Router) and React 19.
+- **Dynamic Content**: Projects, Profile details, and Skills are fetched directly from a Google Sheet.
+- **Stunning UI**: styled with **Tailwind CSS 4** and animated with **Framer Motion** (including interactive star backgrounds).
+- **Admin Authentication**: Secure admin area to manage content via the Google Sheets integration.
+- **Image Optimization**: Images are hosted and optimized via **Cloudinary**.
+- **Responsive**: Fully responsive design for all devices.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Framework**: [Next.js 16](https://nextjs.org/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **CMS / Database**: [Google Sheets API](https://developers.google.com/sheets/api)
+- **Image Hosting**: [Cloudinary](https://cloudinary.com/)
+- **Auth**: `jose` (JWT) & `bcryptjs`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🏁 Getting Started
 
-## Learn More
+### Prerequisites
 
-To learn more about Next.js, take a look at the following resources:
+- Node.js (v18 or higher)
+- A Google Cloud Platform project with Sheets API enabled
+- A Cloudinary account
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Installation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/portfolio.git
+   cd portfolio
+   ```
 
-## Deploy on Vercel
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. **Environment Setup**
+   Create a `.env.local` file in the root directory and add the following variables:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```env
+   # Google Sheets API
+   GOOGLE_SERVICE_ACCOUNT_EMAIL=your-service-account-email
+   GOOGLE_PRIVATE_KEY="your-private-key"
+   GOOGLE_SHEET_ID=your-spreadsheet-id
+
+   # Cloudinary
+   CLOUDINARY_CLOUD_NAME=your-cloud-name
+   CLOUDINARY_API_KEY=your-api-key
+   CLOUDINARY_API_SECRET=your-api-secret
+
+   # Authentication
+   JWT_SECRET=your-secure-jwt-secret
+   ADMIN_PASSWORD=your-admin-password
+   ```
+
+4. **Setup Google Sheets**
+   - Create a new Google Sheet.
+   - Share the sheet with your Service Account Email (Editor access).
+   - Run the setup script to initialize the sheet structure and seed data:
+     ```bash
+     npm run setup:sheets
+     ```
+
+5. **Run the Development Server**
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## 📂 Project Structure
+
+- `app/`: Next.js App Router pages and API routes.
+- `components/`: Reusable UI components.
+- `lib/`: Utility functions and API clients (Google Sheets, Cloudinary).
+- `scripts/`: Maintenance and setup scripts.
+- `types/`: TypeScript type definitions.
+
+## 📄 License
+
+This project is licensed under the MIT License.
