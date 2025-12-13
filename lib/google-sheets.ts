@@ -67,11 +67,33 @@ export async function getProfile(): Promise<Profile | null> {
         github: profileMap['github'] || '',
         linkedin: profileMap['linkedin'] || '',
         twitter: profileMap['twitter'] || '',
+        facebook: profileMap['facebook'] || '',
+        instagram: profileMap['instagram'] || '',
+        website: profileMap['website'] || '',
       },
     };
   } catch (error) {
     console.error('Error fetching profile:', error);
     return null;
+  }
+}
+
+export async function getSkills(): Promise<Skill[]> {
+  try {
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId: SPREADSHEET_ID,
+      range: `${SHEET_SKILLS}!A2:B`,
+    });
+
+    const rows = response.data.values || [];
+    
+    return rows.map((row) => ({
+      category: row[0] || '',
+      items: row[1] ? row[1].split(',').map((s: string) => s.trim()) : [],
+    }));
+  } catch (error) {
+    console.error('Error fetching skills:', error);
+    return [];
   }
 }
 
