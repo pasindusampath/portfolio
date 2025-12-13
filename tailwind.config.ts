@@ -55,6 +55,31 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      animation: {
+        "move": "move 5s linear infinite",
+        "shimmer": "shimmer 2s linear infinite",
+        "shooting-star": "shooting-star 3s linear infinite",
+        "twinkle": "twinkle 2s ease-in-out infinite",
+      },
+      keyframes: {
+        "move": {
+          "0%": { transform: "translateX(-200px)" },
+          "100%": { transform: "translateX(100%)" },
+        },
+        "shimmer": {
+          from: { backgroundPosition: "0 0" },
+          to: { backgroundPosition: "-200% 0" },
+        },
+        "shooting-star": {
+          "0%": { transform: "translateX(0) translateY(0) rotate(215deg)", opacity: "1" },
+          "70%": { opacity: "1" },
+          "100%": { transform: "translateX(-500px) translateY(500px) rotate(215deg)", opacity: "0" },
+        },
+        "twinkle": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.5" },
+        },
+      },
     },
   },
   plugins: [],

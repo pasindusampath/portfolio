@@ -26,6 +26,20 @@ export interface Profile {
   };
 }
 
+export interface User {
+    id: string;
+    email: string;
+    passwordHash: string;
+    role: string;
+}
+
+export interface AuthToken {
+    tokenId: string;
+    userId: string;
+    deviceId: string;
+    expiresAt: string;
+}
+
 export interface Skill {
   category: string;
   items: string[];

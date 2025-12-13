@@ -1,6 +1,8 @@
 import { google } from 'googleapis';
 import * as dotenv from 'dotenv';
 import path from 'path';
+import bcrypt from 'bcryptjs';
+import { v4 as uuidv4 } from 'uuid';
 
 // Load .env.local
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
@@ -9,6 +11,9 @@ const SHEET_TITLES = {
   PROJECTS: 'Projects',
   PROFILE: 'Profile',
   SKILLS: 'Skills',
+  USERS: 'Users',
+  TOKENS: 'Tokens',
+  REVOKED_TOKENS: 'RevokedTokens',
 };
 
 const HEADERS = {
@@ -20,6 +25,15 @@ const HEADERS = {
   ],
   [SHEET_TITLES.SKILLS]: [
     'category', 'items' // comma separated items
+  ],
+  [SHEET_TITLES.USERS]: [
+    'id', 'email', 'password_hash', 'role', 'created_at'
+  ],
+  [SHEET_TITLES.TOKENS]: [
+    'token_id', 'user_id', 'device_id', 'refresh_token_hash', 'expires_at', 'created_at'
+  ],
+  [SHEET_TITLES.REVOKED_TOKENS]: [
+    'token_id', 'user_id', 'device_id', 'revoked_at', 'reason'
   ]
 };
 
@@ -91,36 +105,21 @@ async function setupSheets() {
         console.log('✅ All sheets already exist.');
     }
 
-    // 3. Write Headers (and initial data for Profile if empty)
+    // 3. Write Headers
     console.log('📝 Writing headers...');
 
-    // Projects Header
-    await sheets.spreadsheets.values.update({
-      spreadsheetId: sheetId,
-      range: `${SHEET_TITLES.PROJECTS}!A1:I1`,
-      valueInputOption: 'USER_ENTERED',
-      requestBody: { values: [HEADERS[SHEET_TITLES.PROJECTS]] }
-    });
-
-    // Profile Header
-    await sheets.spreadsheets.values.update({
-      spreadsheetId: sheetId,
-      range: `${SHEET_TITLES.PROFILE}!A1:B1`,
-      valueInputOption: 'USER_ENTERED',
-      requestBody: { values: [HEADERS[SHEET_TITLES.PROFILE]] }
-    });
-
-    // Skills Header
-    await sheets.spreadsheets.values.update({
-        spreadsheetId: sheetId,
-        range: `${SHEET_TITLES.SKILLS}!A1:B1`,
-        valueInputOption: 'USER_ENTERED',
-        requestBody: { values: [HEADERS[SHEET_TITLES.SKILLS]] }
-    });
+    for (const [title, headers] of Object.entries(HEADERS)) {
+         await sheets.spreadsheets.values.update({
+            spreadsheetId: sheetId,
+            range: `${title}!A1:${String.fromCharCode(65 + headers.length - 1)}1`,
+            valueInputOption: 'USER_ENTERED',
+            requestBody: { values: [headers] }
+        });
+    }
 
     console.log('✅ Headers updated.');
 
-    // 4. Populate Profile with default data if it looks empty (check row 2)
+    // 4. Populate Profile with default data if it looks empty
     const profileData = await sheets.spreadsheets.values.get({
         spreadsheetId: sheetId,
         range: `${SHEET_TITLES.PROFILE}!A2:A2`
@@ -135,6 +134,34 @@ async function setupSheets() {
             requestBody: { values: INITIAL_PROFILE_DATA }
         });
         console.log('✅ Profile initialized.');
+    }
+
+    // 5. Seed Admin User if Users is empty
+    const usersData = await sheets.spreadsheets.values.get({
+        spreadsheetId: sheetId,
+        range: `${SHEET_TITLES.USERS}!A2:A2`
+    });
+
+    if (!usersData.data.values || usersData.data.values.length === 0) {
+        console.log('🔒 Seeding initial Admin user...');
+        const initialPassword = '1234'; 
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(initialPassword, salt);
+        const adminUser = [
+            uuidv4(),
+            'admin@example.com',
+            hash,
+            'admin',
+            new Date().toISOString()
+        ];
+
+        await sheets.spreadsheets.values.update({
+            spreadsheetId: sheetId,
+            range: `${SHEET_TITLES.USERS}!A2:E2`,
+            valueInputOption: 'USER_ENTERED',
+            requestBody: { values: [adminUser] }
+        });
+        console.log(`✅ Admin created! Email: admin@example.com, Password: ${initialPassword}`);
     }
 
     console.log('🎉 Spreadsheet setup complete!');

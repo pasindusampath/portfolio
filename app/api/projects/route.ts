@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getProjects, addProject } from '@/lib/google-sheets';
 import { uploadImage } from '@/lib/cloudinary';
+import { verifyAccessToken } from '@/lib/auth';
 
 export async function GET() {
   try {
@@ -14,12 +15,23 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { password, imageBase64, ...projectData } = body;
+    const { imageBase64, ...projectData } = body;
 
-    // Simple Admin Check
-    if (password !== process.env.ADMIN_PASSWORD) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // Verify Access Token from Header
+    const authHeader = req.headers.get("Authorization");
+    const token = authHeader?.split(" ")[1]; // Bearer <token>
+    
+    if (!token) {
+         return NextResponse.json({ error: 'Unauthorized: Missing Token' }, { status: 401 });
     }
+
+    const payload = await verifyAccessToken(token);
+    if (!payload || payload.role !== 'admin') {
+         return NextResponse.json({ error: 'Unauthorized: Invalid Token' }, { status: 401 });
+    }
+
+    // Deprecated: Password Check (removed)
+    // if (password !== process.env.ADMIN_PASSWORD) { ... }
 
     let imageUrl = projectData.imageUrl || '';
 
