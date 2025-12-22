@@ -4,12 +4,11 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Github, Linkedin, Mail } from "lucide-react";
 
-import { StarsBackground } from "@/components/ui/stars-background";
-import { ShootingStars } from "@/components/ui/shooting-stars";
+import NetworkHero from "@/components/NetworkHero";
 
 export default function Home() {
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-[85vh] text-center space-y-10 overflow-hidden bg-black">
+    <div className="relative flex flex-col items-center justify-center min-h-[85vh] text-center space-y-10 overflow-hidden">
 
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
@@ -53,11 +52,8 @@ export default function Home() {
         </Link>
       </motion.div>
 
-      {/* Antigravity Hero Background */}
-      <div className="absolute inset-0 z-0">
-        <StarsBackground />
-        <ShootingStars />
-      </div>
+      {/* Network Graph Hero Background */}
+      <NetworkHero />
 
       <motion.div
         initial={{ opacity: 0 }}
