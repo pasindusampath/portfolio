@@ -1,12 +1,13 @@
-import { getProfile, getSkills } from '@/lib/google-sheets';
+import { getProfile, getSkills, getExperience } from '@/lib/google-sheets';
 import Image from 'next/image';
 import { Github, Linkedin, Twitter, Facebook, Instagram, Hash } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import CareerTimeline from '@/components/CareerTimeline';
 
 export const revalidate = 60;
 
 export default async function AboutPage() {
-    const [profile, skills] = await Promise.all([getProfile(), getSkills()]);
+    const [profile, skills, experience] = await Promise.all([getProfile(), getSkills(), getExperience()]);
 
     if (!profile) {
         return (
@@ -75,6 +76,13 @@ export default async function AboutPage() {
                     </div>
                 </div>
             </div>
+
+            {/* Career Journey Section */}
+            {experience.length > 0 && (
+                <div className="space-y-8 animate-in slide-in-from-bottom-10 duration-700 fill-mode-both delay-100">
+                    <CareerTimeline experiences={experience} />
+                </div>
+            )}
 
             {/* Skills Section */}
             {skills.length > 0 && (

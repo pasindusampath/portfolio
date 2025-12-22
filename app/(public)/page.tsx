@@ -61,13 +61,13 @@ export default function Home() {
         transition={{ delay: 0.4 }}
         className="flex gap-6 pt-8 text-muted-foreground"
       >
-        <a href="https://github.com" target="_blank" className="hover:text-foreground transition-colors">
+        <a href="https://github.com/pasindusampath" target="_blank" className="hover:text-foreground transition-colors">
           <Github size={24} />
         </a>
-        <a href="https://linkedin.com" target="_blank" className="hover:text-foreground transition-colors">
+        <a href="https://linkedin.com/in/pasindu-tb/" target="_blank" className="hover:text-foreground transition-colors">
           <Linkedin size={24} />
         </a>
-        <a href="mailto:hello@example.com" className="hover:text-foreground transition-colors">
+        <a href="mailto:hello@pasindusampath.com" className="hover:text-foreground transition-colors">
           <Mail size={24} />
         </a>
       </motion.div>

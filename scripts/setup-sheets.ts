@@ -11,6 +11,7 @@ const SHEET_TITLES = {
   PROJECTS: 'Projects',
   PROFILE: 'Profile',
   SKILLS: 'Skills',
+  EXPERIENCE: 'Experience',
   USERS: 'Users',
   TOKENS: 'Tokens',
   REVOKED_TOKENS: 'RevokedTokens',
@@ -25,6 +26,9 @@ const HEADERS = {
   ],
   [SHEET_TITLES.SKILLS]: [
     'category', 'items' // comma separated items
+  ],
+  [SHEET_TITLES.EXPERIENCE]: [
+    'company', 'position', 'startDate', 'endDate', 'description', 'order'
   ],
   [SHEET_TITLES.USERS]: [
     'id', 'email', 'password_hash', 'role', 'created_at'
@@ -136,6 +140,23 @@ async function setupSheets() {
         console.log('✅ Profile initialized.');
     }
 
+    // 6. Populate Experience with initial data if empty
+    const experienceData = await sheets.spreadsheets.values.get({
+        spreadsheetId: sheetId,
+        range: `${SHEET_TITLES.EXPERIENCE}!A2:A2`
+    });
+    
+    if (!experienceData.data.values || experienceData.data.values.length === 0) {
+        console.log('💼 Populating initial experience data...');
+        await sheets.spreadsheets.values.update({
+            spreadsheetId: sheetId,
+            range: `${SHEET_TITLES.EXPERIENCE}!A2:F${INITIAL_EXPERIENCE_DATA.length + 1}`,
+            valueInputOption: 'USER_ENTERED',
+            requestBody: { values: INITIAL_EXPERIENCE_DATA }
+        });
+        console.log('✅ Experience data initialized.');
+    }
+
     // 5. Seed Admin User if Users is empty
     const usersData = await sheets.spreadsheets.values.get({
         spreadsheetId: sheetId,
@@ -175,3 +196,10 @@ async function setupSheets() {
 }
 
 setupSheets();
+
+
+const INITIAL_EXPERIENCE_DATA = [
+  ['Syber Yakku Crew', 'Intern', '2021-01', '2021-06', 'Started my career as an intern, gaining hands-on experience in software development.', '1'],
+  ['Softsora', 'Junior Software Engineer', '2021-07', '2022-12', 'Developed and maintained web applications, working with modern technologies and frameworks.', '2'],
+  ['Softsora', 'Associate Software Engineer', '2023-01', 'Present', 'Leading development projects and mentoring junior developers while building scalable solutions.', '3']
+];

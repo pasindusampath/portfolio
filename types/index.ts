@@ -44,3 +44,12 @@ export interface Skill {
   category: string;
   items: string[];
 }
+
+export interface Experience {
+  company: string;
+  position: string;
+  startDate: string;
+  endDate: string;
+  description?: string;
+  order: number;
+}

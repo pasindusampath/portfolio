@@ -1,10 +1,11 @@
 import { google } from 'googleapis';
-import { Project, Profile, Skill } from '@/types';
+import { Project, Profile, Skill, Experience } from '@/types';
 
 // Constants for Sheet Tab Names
 const SHEET_PROJECTS = 'Projects';
 const SHEET_PROFILE = 'Profile';
 const SHEET_SKILLS = 'Skills';
+const SHEET_EXPERIENCE = 'Experience';
 
 const GL_AUTH = new google.auth.GoogleAuth({
   credentials: {
@@ -96,6 +97,33 @@ export async function getSkills(): Promise<Skill[]> {
     return [];
   }
 }
+
+export async function getExperience(): Promise<Experience[]> {
+  try {
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId: SPREADSHEET_ID,
+      range: `${SHEET_EXPERIENCE}!A2:F`,
+    });
+
+    const rows = response.data.values || [];
+    
+    const experiences = rows.map((row) => ({
+      company: row[0] || '',
+      position: row[1] || '',
+      startDate: row[2] || '',
+      endDate: row[3] || '',
+      description: row[4] || '',
+      order: parseInt(row[5] || '0', 10),
+    }));
+
+    // Sort by order field
+    return experiences.sort((a, b) => a.order - b.order);
+  } catch (error) {
+    console.error('Error fetching experience:', error);
+    return [];
+  }
+}
+
 
 // Add function to append a new project (for Admin)
 export async function addProject(project: Partial<Project>): Promise<boolean> {
