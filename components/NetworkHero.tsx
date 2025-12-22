@@ -12,8 +12,10 @@ interface Particle {
 const PARTICLE_COUNT = 65;
 const CONNECTION_DISTANCE = 3.5;
 const PARTICLE_SIZE = 0.08;
-const MOVEMENT_SPEED = 0.15;
+const MOVEMENT_SPEED = 0.075; // Reduced by 50% for calmer, more stable motion
 const MOUSE_INFLUENCE = 0.5;
+const BACKGROUND_COLOR = '#1a1a1a'; // Deep slate grey for professional SaaS look
+const PARTICLE_COLOR = '#6b9080'; // Subtle sage green instead of bright neon
 
 function NetworkParticles() {
     const particlesRef = useRef<THREE.InstancedMesh>(null);
@@ -28,9 +30,9 @@ function NetworkParticles() {
         for (let i = 0; i < PARTICLE_COUNT; i++) {
             temp.push({
                 position: new THREE.Vector3(
-                    (Math.random() - 0.5) * 15,
-                    (Math.random() - 0.5) * 10,
-                    (Math.random() - 0.5) * 8
+                    (Math.random() - 0.5) * 25,  // Expanded from 15 to 25
+                    (Math.random() - 0.5) * 15,  // Expanded from 10 to 15
+                    (Math.random() - 0.5) * 12   // Expanded from 8 to 12
                 ),
                 velocity: new THREE.Vector3(
                     (Math.random() - 0.5) * MOVEMENT_SPEED,
@@ -80,7 +82,7 @@ function NetworkParticles() {
             // Boundary checking with smooth bounce
             ['x', 'y', 'z'].forEach((axis) => {
                 const key = axis as 'x' | 'y' | 'z';
-                const bounds = key === 'x' ? 7.5 : key === 'y' ? 5 : 4;
+                const bounds = key === 'x' ? 12.5 : key === 'y' ? 7.5 : 6;  // Expanded boundaries
 
                 if (Math.abs(particle.position[key]) > bounds) {
                     particle.velocity[key] *= -1;
@@ -109,7 +111,7 @@ function NetworkParticles() {
 
                     // Calculate opacity based on distance (closer = more opaque)
                     const opacity = 1 - distance / CONNECTION_DISTANCE;
-                    const color = new THREE.Color(0x10b981); // Muted green
+                    const color = new THREE.Color(PARTICLE_COLOR); // Subtle sage green
 
                     // Add color with opacity for both vertices
                     lineColors.push(color.r, color.g, color.b, opacity);
@@ -141,7 +143,7 @@ function NetworkParticles() {
             {/* Particle instances */}
             <instancedMesh ref={particlesRef} args={[undefined, undefined, PARTICLE_COUNT]}>
                 <sphereGeometry args={[PARTICLE_SIZE, 16, 16]} />
-                <meshBasicMaterial color="#10b981" />
+                <meshBasicMaterial color={PARTICLE_COLOR} />
             </instancedMesh>
 
             {/* Connection lines */}
@@ -160,7 +162,7 @@ function NetworkParticles() {
 
 export default function NetworkHero() {
     return (
-        <div className="fixed inset-0 -z-10" style={{ backgroundColor: '#111111' }}>
+        <div className="fixed inset-0 -z-10" style={{ backgroundColor: BACKGROUND_COLOR }}>
             <Canvas
                 camera={{ position: [0, 0, 12], fov: 50 }}
                 gl={{
@@ -169,6 +171,8 @@ export default function NetworkHero() {
                     powerPreference: 'high-performance'
                 }}
             >
+                {/* Subtle fog for depth without darkness */}
+                <fog attach="fog" args={[BACKGROUND_COLOR, 10, 25]} />
                 <NetworkParticles />
             </Canvas>
         </div>
