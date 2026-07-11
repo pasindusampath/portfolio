@@ -13,7 +13,7 @@ export default function PublicLayout({
         <div className="min-h-screen relative flex flex-col">
             <GridBackground />
             <Navbar />
-            <main className="flex-1 container mx-auto px-4 py-8">
+            <main className="flex-1 w-full">
                 {children}
             </main>
             <Footer />

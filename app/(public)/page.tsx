@@ -464,7 +464,7 @@ export default function Home() {
   const reviewsInView = useInView(reviewsRef, { once: true, margin: "-80px" });
 
   return (
-    <div className="relative bg-black -mx-4 -my-8">
+    <div className="relative bg-black">
       {/* ═══════════════ HERO SECTION ═══════════════ */}
       <section className="relative flex flex-col items-center justify-center min-h-[92vh] text-center overflow-hidden px-4">
         {/* Animated background */}

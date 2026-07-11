@@ -18,7 +18,7 @@ export default async function AboutPage() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto space-y-16 py-8">
+        <div className="max-w-4xl mx-auto space-y-16 px-4 py-8">
             {/* Profile Section */}
             <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
                 <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-muted flex-shrink-0 animate-in fade-in zoom-in duration-500">
