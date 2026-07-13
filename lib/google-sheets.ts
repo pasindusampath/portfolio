@@ -1,10 +1,11 @@
 import { google } from 'googleapis';
-import { Project, Profile, Skill } from '@/types';
+import { Project, Profile, Skill, Footprint } from '@/types';
 
 // Constants for Sheet Tab Names
 const SHEET_PROJECTS = 'Projects';
 const SHEET_PROFILE = 'Profile';
 const SHEET_SKILLS = 'Skills';
+const SHEET_FOOTPRINTS = 'Footprints';
 
 const GL_AUTH = new google.auth.GoogleAuth({
   credentials: {
@@ -200,7 +201,7 @@ export async function findRefreshToken(device_id: string): Promise<{ tokenId: st
     } catch(e) { return null; }
 }
 
-export async function findTokenById(tokenId: string): Promise<{ tokenId: string, userId: string, deviceId: string, hash: string, row: number } | null> {
+export async function findTokenById(tokenId: string): Promise<{ tokenId: string, userId: string, deviceId: string, hash: string, expiresAt: string, row: number } | null> {
     try {
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId: SPREADSHEET_ID,
@@ -216,10 +217,34 @@ export async function findTokenById(tokenId: string): Promise<{ tokenId: string,
             userId: rows[index][1],
             deviceId: rows[index][2],
             hash: rows[index][3],
+            expiresAt: rows[index][4] || '',  // Column E — needed for expiry validation
             row: index + 2 // +2 because 1-based index and header row
         };
     } catch (error) {
         console.error('Error finding token:', error);
+        return null;
+    }
+}
+
+export async function getUserById(userId: string): Promise<User | null> {
+    try {
+        const response = await sheets.spreadsheets.values.get({
+            spreadsheetId: SPREADSHEET_ID,
+            range: `${SHEET_USERS}!A2:E`,
+        });
+        const rows = response.data.values || [];
+        const userRow = rows.find(r => r[0] === userId);
+
+        if (!userRow) return null;
+
+        return {
+            id: userRow[0],
+            email: userRow[1],
+            passwordHash: userRow[2],
+            role: userRow[3],
+        };
+    } catch (error) {
+        console.error('Error fetching user by ID:', error);
         return null;
     }
 }
@@ -266,5 +291,121 @@ export async function revokeToken(tokenId: string, reason: string = 'Refresh Rot
         });
     } catch (error) {
         console.error('Error revoking token:', error);
+    }
+}
+
+async function ensureFootprintsSheet(): Promise<boolean> {
+    try {
+        const sheetId = await getSheetId(SHEET_FOOTPRINTS);
+        if (sheetId !== null) {
+            return true; // Already exists
+        }
+
+        // Create the sheet
+        await sheets.spreadsheets.batchUpdate({
+            spreadsheetId: SPREADSHEET_ID,
+            requestBody: {
+                requests: [
+                    {
+                        addSheet: {
+                            properties: {
+                                title: SHEET_FOOTPRINTS,
+                                gridProperties: {
+                                    rowCount: 1000,
+                                    columnCount: 11,
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        });
+
+        // Write headers
+        await sheets.spreadsheets.values.update({
+            spreadsheetId: SPREADSHEET_ID,
+            range: `${SHEET_FOOTPRINTS}!A1:K1`,
+            valueInputOption: 'USER_ENTERED',
+            requestBody: {
+                values: [[
+                    'ID',
+                    'Device ID',
+                    'Name',
+                    'Emoji',
+                    'Message',
+                    'Color',
+                    'X',
+                    'Y',
+                    'Country',
+                    'City',
+                    'CreatedAt'
+                ]]
+            }
+        });
+
+        return true;
+    } catch (error) {
+        console.error('Error ensuring Footprints sheet exists:', error);
+        return false;
+    }
+}
+
+export async function getFootprints(): Promise<Footprint[]> {
+    try {
+        await ensureFootprintsSheet();
+        const response = await sheets.spreadsheets.values.get({
+            spreadsheetId: SPREADSHEET_ID,
+            range: `${SHEET_FOOTPRINTS}!A2:K`,
+        });
+        const rows = response.data.values || [];
+        return rows.map((row) => ({
+            id: row[0] || '',
+            deviceId: row[1] || '',
+            name: row[2] || '',
+            emoji: row[3] || '',
+            message: row[4] || '',
+            color: row[5] || '',
+            x: parseFloat(row[6]) || 0,
+            y: parseFloat(row[7]) || 0,
+            country: row[8] || '',
+            city: row[9] || '',
+            createdAt: row[10] || '',
+        }));
+    } catch (error) {
+        console.error('Error fetching footprints:', error);
+        return [];
+    }
+}
+
+export async function addFootprint(footprint: Footprint): Promise<boolean> {
+    try {
+        await ensureFootprintsSheet();
+        const values = [
+            [
+                footprint.id,
+                footprint.deviceId,
+                footprint.name,
+                footprint.emoji,
+                footprint.message || '',
+                footprint.color,
+                footprint.x.toString(),
+                footprint.y.toString(),
+                footprint.country || '',
+                footprint.city || '',
+                footprint.createdAt,
+            ],
+        ];
+        await sheets.spreadsheets.values.append({
+            spreadsheetId: SPREADSHEET_ID,
+            range: `${SHEET_FOOTPRINTS}!A:K`,
+            valueInputOption: 'USER_ENTERED',
+            requestBody: {
+                values,
+            },
+        });
+        return true;
+    } catch (error) {
+        console.error('Error adding footprint:', error);
+        return false;
     }
 }

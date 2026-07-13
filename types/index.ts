@@ -44,3 +44,18 @@ export interface Skill {
   category: string;
   items: string[];
 }
+
+export interface Footprint {
+  id: string;
+  deviceId: string;
+  name: string;
+  emoji: string;
+  message?: string;
+  color: string; // Theme/color class or identifier
+  x: number; // Percentage X coordinate (0-100)
+  y: number; // Percentage Y coordinate (0-100)
+  country?: string;
+  city?: string;
+  createdAt: string;
+}
+

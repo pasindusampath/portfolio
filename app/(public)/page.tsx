@@ -24,6 +24,8 @@ import { useEffect, useState, useRef } from "react";
 
 import { StarsBackground } from "@/components/ui/stars-background";
 import { ShootingStars } from "@/components/ui/shooting-stars";
+import FootprintCanvas from "@/components/FootprintCanvas";
+import FootprintPrompt from "@/components/FootprintPrompt";
 
 /* ─────────────────────────────────────────────
    Constants
@@ -601,6 +603,11 @@ export default function Home() {
         </motion.div>
       </section>
 
+      {/* ═══════════════ TRAVELER CONSTELLATION SECTION ═══════════════ */}
+      <div id="traveler-constellation">
+        <FootprintCanvas />
+      </div>
+
       {/* ═══════════════ JOURNEY SECTION ═══════════════ */}
       <section className="relative py-20 md:py-28 px-4">
         {/* Ambient glow */}
@@ -780,6 +787,8 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      <FootprintPrompt />
     </div>
   );
 }

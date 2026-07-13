@@ -14,7 +14,7 @@ export default function AdminPage() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(true); // Check auth on load
     const [password, setPassword] = useState(""); // Kept for typing in form
-    const [email, setEmail] = useState("admin@example.com"); // Hardcoded for now, or add input
+    const [email, setEmail] = useState(""); // Empty — do not leak the admin email in source
     const [projects, setProjects] = useState<Project[]>([]);
     const [isLoadingProjects, setIsLoadingProjects] = useState(false);
 

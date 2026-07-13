@@ -1,44 +1,36 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { verifyAccessToken } from '@/lib/auth';
 
-// Paths that require authentication
-const PROTECTED_PATHS = ['/admin'];
-
+/**
+ * Middleware for the /admin route.
+ *
+ * The admin panel is a fully client-rendered SPA — on the initial page load the
+ * browser receives the shell, then the React component immediately calls
+ * /api/auth/refresh. If that fails, the component renders the login form.
+ *
+ * Server-side access-token validation in Edge middleware is impractical here
+ * because:
+ *  - The access token is stored in React state (in-memory), not in a cookie.
+ *  - Calling googleapis from the Edge runtime is unreliable.
+ *
+ * What we CAN do: if there is no refresh_token cookie at all, we know for
+ * certain the user is logged out, so we redirect them to /admin (which shows
+ * the login form) instead of rendering a blank loading screen for /admin/…
+ * sub-paths.
+ *
+ * Full session validity is enforced in each API route handler via verifyAccessToken.
+ */
 export async function middleware(req: NextRequest) {
-    const path = req.nextUrl.pathname;
-    
-    // Check if path is protected
-    const isProtected = PROTECTED_PATHS.some(prefix => path.startsWith(prefix));
+    const { pathname } = req.nextUrl;
+    const refreshToken = req.cookies.get('refresh_token')?.value;
 
-    if (isProtected) {
-        // We can't easily verify the full session here because we need DB access for Refresh Token
-        // and Edge middleware has limited support for Node libs (googleapis might struggle).
-        // However, we CAN check for an Access Token in headers if we had one set in cookies, but we only set Refresh Token in httpOnly cookie.
-        // Access Token is in-memory on client.
-        // So for the initial page load of /admin, we rely on the client to check auth and redirect.
-        // BUT, what if we want to protect the route rendering?
-        // We can check if `refresh_token` cookie exists. If not, redirect to login.
-        // Ensuring validity is harder without DB.
-        
-        const refreshToken = req.cookies.get('refresh_token')?.value;
-        
-        if (!refreshToken) {
-            // No refresh token, definitely not logged in.
-            // But wait, /admin is the login page too (in our current single-page admin design)!
-            // If we redirect to /admin/login, we'd loop if /admin IS where login lives.
-            // Our design: app/admin/page.tsx handles BOTH Login and Dashboard states.
-            // So we should NOT redirect if we are just requesting the page.
-            // If we had /admin/dashboard vs /admin/login, we would redirect.
-            // Since it's a Single Page App style admin, we allow the request to pass.
-            // The client component will show the Login form if no auth.
-            return NextResponse.next();
-        }
+    // Protect deep admin sub-paths — if there is provably no session, redirect
+    // to the admin root (login form) rather than attempting to render the page.
+    const isDeepAdminPath = pathname.startsWith('/admin/');
+    if (isDeepAdminPath && !refreshToken) {
+        return NextResponse.redirect(new URL('/admin', req.url));
     }
 
-    // For API routes protection?
-    // We handle API protection in the route handlers themselves (verifyAccessToken).
-    
     return NextResponse.next();
 }
 

@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
-import { getUserByEmail, storeRefreshToken } from '@/lib/google-sheets';
-import { hashPassword, comparePassword, signAccessToken, generateRefreshToken } from '@/lib/auth';
+import { getUserByEmail } from '@/lib/google-sheets';
+import { storeRefreshToken } from '@/lib/google-sheets';
+import { comparePassword, signAccessToken, generateRefreshToken, hashToken } from '@/lib/auth';
+import { isBlocked, recordFailedAttempt, clearAttempts } from '@/lib/rate-limit';
 import { cookies } from 'next/headers';
 
 export async function POST(req: Request) {
@@ -11,45 +13,65 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Missing credentials' }, { status: 400 });
         }
 
+        // --- Rate Limiting ---
+        // Use the IP from Vercel headers; fall back to a generic key locally
+        const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+            ?? req.headers.get('x-real-ip')
+            ?? 'local';
+
+        const { blocked, retryAfterSeconds } = isBlocked(ip);
+        if (blocked) {
+            return NextResponse.json(
+                { error: `Too many failed attempts. Try again in ${retryAfterSeconds} seconds.` },
+                { status: 429, headers: { 'Retry-After': String(retryAfterSeconds) } }
+            );
+        }
+
+        // --- Credential Validation ---
         const user = await getUserByEmail(email);
         if (!user) {
+            recordFailedAttempt(ip);
+            // Generic message — does not reveal whether the email exists
             return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
         }
 
         const isValid = await comparePassword(password, user.passwordHash);
         if (!isValid) {
+            recordFailedAttempt(ip);
             return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
         }
 
-        // Generate Tokens
-        const accessToken = await signAccessToken({ userId: user.id, email: user.email, role: user.role });
-        const refreshToken = generateRefreshToken();
+        // Clear failure counter on successful login
+        clearAttempts(ip);
 
-        // Store Refresh Token (We store the token itself since it's opaque UUID, simpler for lookup/validation in this context)
-        // Ideally we hash it, but let's stick to the plan of matching token + device ID.
-        // For extra security, one might hash it, but then we need to iterate to find it or query by another ID. 
-        // Our 'findTokenById' uses tokenId. We aren't storing `tokenId` separate from `refreshToken` yet in the generate function.
-        // Let's assume refreshToken IS the tokenId for simplicity, or we generate a pair.
-        // Let's use refreshToken string as the "token" and generate a purely unique ID for the DB row if needed.
-        // Actually, schema said 'token_id', 'device_id'. Let's treat refreshToken as the secret.
-        // So we need: tokenId (public/lookup), refreshToken (secret/hashed).
-        // Simplification: UUID is the refresh token. We store it as `token_id`.
-        
-        const expiresAt = new Date();
-        expiresAt.setDate(expiresAt.getDate() + 7); // 7 days
-
-        await storeRefreshToken({
-            tokenId: refreshToken, // Using the UUID as the token itself
+        // --- Token Generation ---
+        const accessToken = await signAccessToken({
             userId: user.id,
-            deviceId,
-            expiresAt: expiresAt.toISOString()
-        }, refreshToken); // Storing it directly as hash for now (in real app, use bcrypt(refreshToken)). 
-        // Note: lib/google-sheets storeRefreshToken takes (tokenObj, hash). 
-        // If we treat the UUID as the token, we can just store it.
+            email: user.email,
+            role: user.role,
+        });
 
-        // Set Cookie
+        const rawRefreshToken = generateRefreshToken();
+        // SECURITY: Only the SHA-256 hash of the token is persisted in the DB.
+        // The raw UUID lives only in the httpOnly cookie on the client.
+        const tokenHash = hashToken(rawRefreshToken);
+
+        const expiresAt = new Date();
+        expiresAt.setDate(expiresAt.getDate() + 7); // 7-day refresh window
+
+        await storeRefreshToken(
+            {
+                tokenId: tokenHash, // hash is the stable lookup key in the DB
+                userId: user.id,
+                deviceId,
+                expiresAt: expiresAt.toISOString(),
+            },
+            tokenHash // hash column — stored again for future constant-time comparison
+        );
+
+        // --- Set Cookies ---
         const cookieStore = await cookies();
-        cookieStore.set('refresh_token', refreshToken, {
+        cookieStore.set('refresh_token', rawRefreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
@@ -57,11 +79,12 @@ export async function POST(req: Request) {
             path: '/',
         });
 
-        // Set Device ID Cookie persistence
         cookieStore.set('device_id', deviceId, {
-            httpOnly: true, 
+            httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            maxAge: 60 * 60 * 24 * 365,
+            sameSite: 'strict',
+            maxAge: 60 * 60 * 24 * 365, // 1 year
+            path: '/',
         });
 
         return NextResponse.json({ accessToken, user: { email: user.email, role: user.role } });
