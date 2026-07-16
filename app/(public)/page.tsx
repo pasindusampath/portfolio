@@ -36,6 +36,16 @@ import FootprintPrompt from "@/components/FootprintPrompt";
 
 const BIRTHDAY = new Date(2002, 9, 8); // Oct 8, 2002 (month is 0-indexed)
 
+const SURVIVAL_QUOTES = [
+  "Every day you wake up is another chance to change your life.",
+  "In the end, it's not the years in your life that count. It's the life in your years. — Abraham Lincoln",
+  "You only live once, but if you do it right, once is enough. — Mae West",
+  "Don't count the days, make the days count. — Muhammad Ali",
+  "Life is either a daring adventure or nothing at all. — Helen Keller",
+  "The biggest adventure you can take is to live the life of your dreams. — Oprah Winfrey",
+  "Keep going. Every heartbeat is proof that you're meant to be here.",
+];
+
 const MILESTONES = [
   {
     date: "April 2021",
@@ -519,6 +529,42 @@ const CONTENT_TRAITS = [
 
 export default function Home() {
   const time = useLifeCounter();
+
+  // Visitor survival calculator
+  const [visitorBirthday, setVisitorBirthday] = useState<string>("");
+  const [visitorTime, setVisitorTime] = useState<TimeUnits | null>(null);
+  const [showVisitorMode, setShowVisitorMode] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [survivalQuote, setSurvivalQuote] = useState("");
+
+  useEffect(() => {
+    if (!visitorBirthday) return;
+    const bday = new Date(visitorBirthday);
+    if (isNaN(bday.getTime()) || bday >= new Date()) return;
+
+    function calc(): TimeUnits {
+      const now = new Date();
+      let years = now.getFullYear() - bday.getFullYear();
+      let months = now.getMonth() - bday.getMonth();
+      let days = now.getDate() - bday.getDate();
+      if (days < 0) { months--; days += new Date(now.getFullYear(), now.getMonth(), 0).getDate(); }
+      if (months < 0) { years--; months += 12; }
+      return { years, months, days, hours: now.getHours(), minutes: now.getMinutes(), seconds: now.getSeconds() };
+    }
+
+    setVisitorTime(calc());
+    setShowVisitorMode(true);
+    setSurvivalQuote(SURVIVAL_QUOTES[Math.floor(Math.random() * SURVIVAL_QUOTES.length)]);
+    const interval = setInterval(() => setVisitorTime(calc()), 1000);
+    return () => clearInterval(interval);
+  }, [visitorBirthday]);
+
+  const handleResetVisitor = () => {
+    setShowVisitorMode(false);
+    setVisitorBirthday("");
+    setVisitorTime(null);
+    setShowDatePicker(false);
+  };
   const journeyRef = useRef<HTMLDivElement>(null);
   const journeyInView = useInView(journeyRef, { once: true, margin: "-80px" });
   const beyondRef = useRef<HTMLDivElement>(null);
@@ -599,21 +645,21 @@ export default function Home() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white"
           >
-            I have{" "}
+            {showVisitorMode ? "You" : "I"} have{" "}
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 via-purple-400 to-fuchsia-400">
               survived
             </span>
           </motion.h1>
 
           {/* Counter grid */}
-          {time ? (
+          {(showVisitorMode ? visitorTime : time) ? (
             <div className="flex flex-wrap justify-center gap-2.5 md:gap-3">
-              <CounterCard value={time.years} label="Years" delay={0.1} />
-              <CounterCard value={time.months} label="Months" delay={0.15} />
-              <CounterCard value={time.days} label="Days" delay={0.2} />
-              <CounterCard value={time.hours} label="Hours" delay={0.25} />
-              <CounterCard value={time.minutes} label="Minutes" delay={0.3} />
-              <CounterCard value={time.seconds} label="Seconds" delay={0.35} />
+              <CounterCard value={(showVisitorMode ? visitorTime! : time!).years} label="Years" delay={0.1} />
+              <CounterCard value={(showVisitorMode ? visitorTime! : time!).months} label="Months" delay={0.15} />
+              <CounterCard value={(showVisitorMode ? visitorTime! : time!).days} label="Days" delay={0.2} />
+              <CounterCard value={(showVisitorMode ? visitorTime! : time!).hours} label="Hours" delay={0.25} />
+              <CounterCard value={(showVisitorMode ? visitorTime! : time!).minutes} label="Minutes" delay={0.3} />
+              <CounterCard value={(showVisitorMode ? visitorTime! : time!).seconds} label="Seconds" delay={0.35} />
             </div>
           ) : (
             /* Placeholder to prevent layout shift during SSR hydration */
@@ -630,6 +676,57 @@ export default function Home() {
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-lg shadow-emerald-500/50" />
             ...on this beautiful planet
           </motion.p>
+
+          {/* Visitor survival calculator */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.55 }}
+            className="flex flex-col items-center gap-3"
+          >
+            {showVisitorMode ? (
+              /* Show motivational quote + back button */
+              <div className="max-w-lg text-center space-y-3">
+                <p className="text-sm md:text-base text-gray-400 italic leading-relaxed">
+                  &ldquo;{survivalQuote}&rdquo;
+                </p>
+                <button
+                  onClick={handleResetVisitor}
+                  className="text-xs text-violet-400 hover:text-violet-300 transition-colors underline underline-offset-2"
+                >
+                  ← Back to Pasindu&apos;s counter
+                </button>
+              </div>
+            ) : showDatePicker ? (
+              /* Show date input */
+              <div className="flex items-center gap-2">
+                <input
+                  type="date"
+                  value={visitorBirthday}
+                  onChange={(e) => setVisitorBirthday(e.target.value)}
+                  max={new Date().toISOString().split("T")[0]}
+                  className="px-4 py-2 rounded-full bg-white/[0.05] border border-white/[0.1] text-white text-sm focus:border-violet-500/50 outline-none transition-all [color-scheme:dark]"
+                  id="visitor-birthday-input"
+                  autoFocus
+                />
+                <button
+                  onClick={() => setShowDatePicker(false)}
+                  className="text-xs text-gray-500 hover:text-gray-300 transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              /* Show calculate button */
+              <button
+                onClick={() => setShowDatePicker(true)}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-violet-500/20 bg-violet-500/10 text-violet-400 text-xs font-medium hover:bg-violet-500/20 hover:border-violet-500/30 transition-all"
+                id="calculate-yours-btn"
+              >
+                🎂 Calculate yours
+              </button>
+            )}
+          </motion.div>
 
           {/* CTA buttons */}
           <motion.div
