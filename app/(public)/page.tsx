@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -19,6 +19,8 @@ import {
   MessageCircleHeart,
   Quote,
   Globe,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 
@@ -413,6 +415,48 @@ function TestimonialCard({
    Main Page
    ───────────────────────────────────────────── */
 
+const QUOTES = [
+  {
+    context: "Kai: \"Who are you?\"",
+    quote: "I am the son of a panda, the son of a goose, a student, and a teacher. I'm all of these things. I am the Dragon Warrior.",
+    speaker: "Po, Kung Fu Panda 3",
+    reflection: "Like Po, we are not defined by a single label. We are a collection of our heritage, our mentors, our students, and our own creation.",
+    accentColor: "from-amber-400 via-orange-400 to-yellow-500",
+    borderColor: "group-hover:border-amber-500/30",
+    iconColor: "text-amber-400",
+    bgGlow: "bg-amber-500/[0.04]",
+    cornerGlow: "bg-amber-500/10",
+    ringColor: "border-amber-500/20 bg-amber-500/10 shadow-amber-500/5",
+    lineGradient: "from-amber-500/40"
+  },
+  {
+    context: "Shifu: \"How to find peace?\"",
+    quote: "Yesterday is history, tomorrow is a mystery, but today is a gift. That is why it is called the present.",
+    speaker: "Master Oogway, Kung Fu Panda",
+    reflection: "In code and in life, worrying about the future or rewriting the past can consume us. Focus on the code you can write today.",
+    accentColor: "from-emerald-400 via-teal-400 to-emerald-500",
+    borderColor: "group-hover:border-emerald-500/30",
+    iconColor: "text-emerald-400",
+    bgGlow: "bg-emerald-500/[0.04]",
+    cornerGlow: "bg-emerald-500/10",
+    ringColor: "border-emerald-500/20 bg-emerald-500/10 shadow-emerald-500/5",
+    lineGradient: "from-emerald-500/40"
+  },
+  {
+    context: "Zuko: \"What path do I choose?\"",
+    quote: "It is time for you to look inward and start asking yourself the big question: Who are you and what do you want?",
+    speaker: "Uncle Iroh, Avatar: The Last Airbender",
+    reflection: "True growth doesn't come from following a predetermined path. It comes from having the courage to discover your own direction.",
+    accentColor: "from-sky-400 via-blue-400 to-indigo-500",
+    borderColor: "group-hover:border-sky-500/30",
+    iconColor: "text-sky-400",
+    bgGlow: "bg-sky-500/[0.04]",
+    cornerGlow: "bg-sky-500/10",
+    ringColor: "border-sky-500/20 bg-sky-500/10 shadow-sky-500/5",
+    lineGradient: "from-sky-500/40"
+  }
+];
+
 const CONTENT_TRAITS = [
   {
     emoji: "🤡",
@@ -464,6 +508,47 @@ export default function Home() {
   const beyondInView = useInView(beyondRef, { once: true, margin: "-80px" });
   const reviewsRef = useRef<HTMLDivElement>(null);
   const reviewsInView = useInView(reviewsRef, { once: true, margin: "-80px" });
+  const quoteRef = useRef<HTMLDivElement>(null);
+  const quoteInView = useInView(quoteRef, { once: true, margin: "-80px" });
+
+  const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
+  const [slideDirection, setSlideDirection] = useState(0);
+
+  const handlePrevQuote = () => {
+    setSlideDirection(-1);
+    setCurrentQuoteIndex((prev) => (prev === 0 ? QUOTES.length - 1 : prev - 1));
+  };
+
+  const handleNextQuote = () => {
+    setSlideDirection(1);
+    setCurrentQuoteIndex((prev) => (prev === QUOTES.length - 1 ? 0 : prev + 1));
+  };
+
+  const activeQuote = QUOTES[currentQuoteIndex];
+
+  const slideVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 100 : -100,
+      opacity: 0,
+      scale: 0.98,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      scale: 1,
+    },
+    exit: (direction: number) => ({
+      x: direction < 0 ? 100 : -100,
+      opacity: 0,
+      scale: 0.98,
+    }),
+  };
+
+  const slideTransition = {
+    x: { type: "spring" as const, stiffness: 300, damping: 30 },
+    opacity: { duration: 0.25 },
+    scale: { duration: 0.35 },
+  };
 
   return (
     <div className="relative bg-black">
@@ -645,6 +730,128 @@ export default function Home() {
               index={index}
             />
           ))}
+        </div>
+      </section>
+
+      {/* ═══════════════ KUNG FU PANDA QUOTE SECTION ═══════════════ */}
+      <section className="relative py-24 px-4 overflow-hidden border-y border-white/[0.02] bg-gradient-to-b from-transparent via-white/[0.01] to-transparent">
+        {/* Dynamic ambient background glow */}
+        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] ${activeQuote.bgGlow} rounded-full blur-[130px] pointer-events-none transition-all duration-1000`} />
+
+        <div ref={quoteRef} className="max-w-3xl mx-auto relative z-10">
+          {/* Desktop Nav Controls */}
+          <div className="absolute top-1/2 -left-16 -translate-y-1/2 hidden md:block z-20">
+            <button 
+              onClick={handlePrevQuote}
+              className="w-11 h-11 rounded-full border border-white/[0.06] bg-black/40 backdrop-blur-md flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-all active:scale-95 cursor-pointer shadow-lg hover:bg-black/60"
+              aria-label="Previous quote"
+            >
+              <ChevronLeft size={18} />
+            </button>
+          </div>
+          <div className="absolute top-1/2 -right-16 -translate-y-1/2 hidden md:block z-20">
+            <button 
+              onClick={handleNextQuote}
+              className="w-11 h-11 rounded-full border border-white/[0.06] bg-black/40 backdrop-blur-md flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-all active:scale-95 cursor-pointer shadow-lg hover:bg-black/60"
+              aria-label="Next quote"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
+
+          {/* Main Glassmorphic Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 40, scale: 0.98 }}
+            animate={quoteInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="relative p-8 md:p-16 rounded-3xl bg-white/[0.015] border border-white/[0.05] backdrop-blur-md overflow-hidden text-center group hover:bg-white/[0.025] transition-all duration-700 shadow-2xl min-h-[360px] md:min-h-[400px] flex flex-col justify-center"
+          >
+            {/* Dynamic Ambient Corner Accents */}
+            <div className={`absolute -top-10 -right-10 w-24 h-24 ${activeQuote.cornerGlow} rounded-full blur-xl transition-all duration-1000`} />
+            <div className={`absolute -bottom-10 -left-10 w-24 h-24 ${activeQuote.cornerGlow} opacity-50 rounded-full blur-xl transition-all duration-1000`} />
+
+            <AnimatePresence mode="wait" custom={slideDirection}>
+              <motion.div
+                key={currentQuoteIndex}
+                custom={slideDirection}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={slideTransition}
+                className="flex flex-col items-center flex-1 justify-center"
+              >
+                {/* Decorative Themed Circle */}
+                <div className={`w-16 h-16 rounded-full border ${activeQuote.ringColor} flex items-center justify-center mb-8 transition-all duration-700`}>
+                  <Sparkles className={`${activeQuote.iconColor} w-6 h-6 animate-pulse`} />
+                </div>
+
+                {/* Cinematic Label */}
+                <span className={`text-[10px] md:text-xs uppercase tracking-[0.4em] font-bold block mb-5 ${activeQuote.iconColor} transition-colors duration-700`}>
+                  {activeQuote.context}
+                </span>
+
+                {/* The Quote */}
+                <h3 className="text-xl md:text-3xl font-medium text-white italic leading-relaxed max-w-2xl mx-auto mb-8 tracking-wide font-serif">
+                  &ldquo;{activeQuote.quote}&rdquo;
+                </h3>
+
+                {/* The Origin with Custom Gradient Lines */}
+                <div className="flex items-center justify-center gap-4">
+                  <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-white/20" />
+                  <span className={`text-xs font-bold tracking-[0.25em] bg-clip-text text-transparent bg-gradient-to-r ${activeQuote.accentColor} uppercase transition-all duration-700`}>
+                    {activeQuote.speaker}
+                  </span>
+                  <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-white/20" />
+                </div>
+
+                {/* Reflective Connection */}
+                <p className="mt-10 text-gray-400 text-xs md:text-sm max-w-lg mx-auto leading-relaxed italic border-t border-white/[0.05] pt-6">
+                  {activeQuote.reflection}
+                </p>
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
+
+          {/* Unified Pagination Indicators + Mobile Chevrons */}
+          <div className="flex items-center justify-center gap-6 mt-8 z-20 relative">
+            <button 
+              onClick={handlePrevQuote}
+              className="w-9 h-9 rounded-full border border-white/[0.06] bg-white/[0.02] flex items-center justify-center text-gray-400 active:scale-95 md:hidden"
+              aria-label="Previous quote"
+            >
+              <ChevronLeft size={16} />
+            </button>
+
+            <div className="flex justify-center gap-2">
+              {QUOTES.map((_, i) => {
+                const isActive = i === currentQuoteIndex;
+                return (
+                  <button
+                    key={i}
+                    onClick={() => {
+                      setSlideDirection(i > currentQuoteIndex ? 1 : -1);
+                      setCurrentQuoteIndex(i);
+                    }}
+                    className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer ${
+                      isActive 
+                        ? `w-6 bg-gradient-to-r ${QUOTES[i].accentColor}` 
+                        : "w-1.5 bg-white/10 hover:bg-white/30"
+                    }`}
+                    aria-label={`Go to slide ${i + 1}`}
+                  />
+                );
+              })}
+            </div>
+
+            <button 
+              onClick={handleNextQuote}
+              className="w-9 h-9 rounded-full border border-white/[0.06] bg-white/[0.02] flex items-center justify-center text-gray-400 active:scale-95 md:hidden"
+              aria-label="Next quote"
+            >
+              <ChevronRight size={16} />
+            </button>
+          </div>
         </div>
       </section>
 

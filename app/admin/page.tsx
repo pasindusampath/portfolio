@@ -225,6 +225,10 @@ export default function AdminPage() {
                         <StatCard label="Auth Status" value={accessToken ? "Active" : "Inactive"} icon={Settings} />
                     </div>
                 )}
+
+                {activeTab === 'settings' && (
+                    <SettingsTab accessToken={accessToken} />
+                )}
             </main>
 
             {/* Add Project Modal */}
@@ -372,12 +376,21 @@ function AddProjectModal({ accessToken, onClose, onSuccess }: any) {
         featured: false,
     });
     const [imageBase64, setImageBase64] = useState<string | null>(null);
+    const [isReadingFile, setIsReadingFile] = useState(false);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            setIsReadingFile(true);
             const reader = new FileReader();
-            reader.onloadend = () => setImageBase64(reader.result as string);
+            reader.onloadend = () => {
+                setImageBase64(reader.result as string);
+                setIsReadingFile(false);
+            };
+            reader.onerror = () => {
+                setIsReadingFile(false);
+                alert("Failed to read image file.");
+            };
             reader.readAsDataURL(file);
         }
     };
@@ -492,13 +505,28 @@ function AddProjectModal({ accessToken, onClose, onSuccess }: any) {
 
                     <div>
                         <label className="block text-sm font-medium mb-1.5">Project Image</label>
-                        <div className="border-2 border-dashed border-white/10 rounded-xl p-8 hover:bg-secondary/20 transition-colors text-center cursor-pointer relative">
+                        <div className="border-2 border-dashed border-white/10 rounded-xl p-8 hover:bg-secondary/20 transition-colors text-center cursor-pointer relative overflow-hidden min-h-[160px] flex items-center justify-center">
                             <input
                                 type="file"
                                 accept="image/*"
                                 onChange={handleImageChange}
-                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
+                                disabled={loading || isReadingFile}
                             />
+                            
+                            {isReadingFile || (loading && imageBase64) ? (
+                                <div className="absolute inset-0 bg-black/85 flex flex-col items-center justify-center z-10">
+                                    <motion.div
+                                        animate={{ rotate: 360 }}
+                                        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                                        className="w-10 h-10 rounded-full border-2 border-primary/20 border-t-primary mb-3 shadow-lg shadow-primary/20"
+                                    />
+                                    <span className="text-xs text-white tracking-wider font-semibold uppercase animate-pulse">
+                                        {isReadingFile ? "Reading Image..." : "Uploading Image..."}
+                                    </span>
+                                </div>
+                            ) : null}
+
                             {imageBase64 ? (
                                 <div className="relative h-40 w-full">
                                     <Image src={imageBase64} alt="Preview" fill className="object-contain" />
@@ -535,5 +563,309 @@ function AddProjectModal({ accessToken, onClose, onSuccess }: any) {
                 </form>
             </motion.div>
         </div>
+    );
+}
+
+function SettingsTab({ accessToken }: { accessToken: string | null }) {
+    const [loading, setLoading] = useState(false);
+    const [fetching, setFetching] = useState(true);
+    const [profile, setProfile] = useState({
+        name: "",
+        role: "",
+        bio: "",
+        email: "",
+        avatarUrl: "",
+        github: "",
+        linkedin: "",
+        twitter: "",
+        facebook: "",
+        instagram: "",
+        website: "",
+    });
+    const [avatarBase64, setAvatarBase64] = useState<string | null>(null);
+    const [isReadingFile, setIsReadingFile] = useState(false);
+
+    useEffect(() => {
+        async function fetchProfile() {
+            try {
+                const res = await fetch("/api/profile");
+                if (res.ok) {
+                    const data = await res.json();
+                    setProfile({
+                        name: data.name || "",
+                        role: data.role || "",
+                        bio: data.bio || "",
+                        email: data.email || "",
+                        avatarUrl: data.avatarUrl || "",
+                        github: data.socials?.github || "",
+                        linkedin: data.socials?.linkedin || "",
+                        twitter: data.socials?.twitter || "",
+                        facebook: data.socials?.facebook || "",
+                        instagram: data.socials?.instagram || "",
+                        website: data.socials?.website || "",
+                    });
+                }
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setFetching(false);
+            }
+        }
+        fetchProfile();
+    }, []);
+
+    const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setIsReadingFile(true);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setAvatarBase64(reader.result as string);
+                setIsReadingFile(false);
+            };
+            reader.onerror = () => {
+                setIsReadingFile(false);
+                alert("Failed to read image file.");
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const res = await fetch("/api/profile", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify({
+                    name: profile.name,
+                    role: profile.role,
+                    bio: profile.bio,
+                    email: profile.email,
+                    avatarUrl: profile.avatarUrl,
+                    avatarBase64,
+                    socials: {
+                        github: profile.github,
+                        linkedin: profile.linkedin,
+                        twitter: profile.twitter,
+                        facebook: profile.facebook,
+                        instagram: profile.instagram,
+                        website: profile.website,
+                    }
+                }),
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                if (data.avatarUrl) {
+                    setProfile(prev => ({ ...prev, avatarUrl: data.avatarUrl }));
+                }
+                setAvatarBase64(null);
+                alert("Profile updated successfully!");
+            } else {
+                const data = await res.json();
+                alert(data.error || "Failed to update profile");
+            }
+        } catch (err) {
+            alert("Something went wrong");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (fetching) {
+        return (
+            <div className="flex items-center justify-center h-64">
+                <Loader2 className="animate-spin text-primary" size={32} />
+            </div>
+        );
+    }
+
+    return (
+        <form onSubmit={handleSubmit} className="max-w-4xl space-y-6 pb-12">
+            <div className="p-6 rounded-2xl bg-card/40 border border-white/5 backdrop-blur-sm space-y-6">
+                <h3 className="text-lg font-semibold border-b border-white/10 pb-3">About Information</h3>
+                
+                <div className="flex flex-col md:flex-row gap-6">
+                    {/* Avatar Upload */}
+                    <div className="flex flex-col items-center gap-3">
+                        <label className="block text-sm font-medium text-muted-foreground mb-1.5 self-start">Profile Avatar</label>
+                        <div className="relative w-32 h-32 rounded-full border border-white/10 overflow-hidden group cursor-pointer bg-white/5 flex items-center justify-center">
+                            {avatarBase64 ? (
+                                <Image src={avatarBase64} alt="Preview" fill className="object-cover" />
+                            ) : profile.avatarUrl ? (
+                                <Image src={profile.avatarUrl} alt="Avatar" fill className="object-cover" />
+                            ) : (
+                                <span className="text-xs text-muted-foreground">No Image</span>
+                            )}
+                            
+                            {/* Loading / Reading Overlay */}
+                            {isReadingFile || (loading && avatarBase64) ? (
+                                <div className="absolute inset-0 bg-black/75 flex flex-col items-center justify-center z-10">
+                                    <motion.div
+                                        animate={{ rotate: 360 }}
+                                        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                                        className="w-8 h-8 rounded-full border-2 border-primary/20 border-t-primary mb-2 shadow-lg shadow-primary/20"
+                                    />
+                                    <span className="text-[9px] text-white tracking-wider font-medium uppercase animate-pulse">
+                                        {isReadingFile ? "Reading..." : "Uploading..."}
+                                    </span>
+                                </div>
+                            ) : (
+                                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center transition-opacity z-10">
+                                    <Upload size={18} className="text-white mb-1" />
+                                    <span className="text-[10px] text-white">Upload New</span>
+                                </div>
+                            )}
+
+                            <input 
+                                type="file" 
+                                accept="image/*" 
+                                onChange={handleAvatarChange} 
+                                className="absolute inset-0 opacity-0 cursor-pointer z-20"
+                                disabled={loading || isReadingFile}
+                            />
+                        </div>
+                        {avatarBase64 && (
+                            <button 
+                                type="button" 
+                                onClick={() => setAvatarBase64(null)}
+                                className="text-xs text-red-400 hover:underline"
+                            >
+                                Cancel Upload
+                            </button>
+                        )}
+                    </div>
+
+                    {/* Name & Role */}
+                    <div className="flex-1 space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium mb-1.5">Full Name</label>
+                                <input
+                                    required
+                                    type="text"
+                                    value={profile.name}
+                                    onChange={e => setProfile({ ...profile, name: e.target.value })}
+                                    className="w-full p-3 rounded-xl bg-secondary/50 border border-white/5 focus:ring-1 focus:ring-primary outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-1.5">Role Title</label>
+                                <input
+                                    required
+                                    type="text"
+                                    value={profile.role}
+                                    onChange={e => setProfile({ ...profile, role: e.target.value })}
+                                    className="w-full p-3 rounded-xl bg-secondary/50 border border-white/5 focus:ring-1 focus:ring-primary outline-none"
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium mb-1.5">Email Address</label>
+                            <input
+                                required
+                                type="email"
+                                value={profile.email}
+                                onChange={e => setProfile({ ...profile, email: e.target.value })}
+                                className="w-full p-3 rounded-xl bg-secondary/50 border border-white/5 focus:ring-1 focus:ring-primary outline-none"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium mb-1.5">Bio / Description</label>
+                    <textarea
+                        required
+                        rows={4}
+                        value={profile.bio}
+                        onChange={e => setProfile({ ...profile, bio: e.target.value })}
+                        className="w-full p-3 rounded-xl bg-secondary/50 border border-white/5 focus:ring-1 focus:ring-primary outline-none leading-relaxed text-sm"
+                    />
+                </div>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-card/40 border border-white/5 backdrop-blur-sm space-y-4">
+                <h3 className="text-lg font-semibold border-b border-white/10 pb-3">Social Connections</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label className="block text-sm font-medium mb-1.5">GitHub URL</label>
+                        <input
+                            type="url"
+                            value={profile.github}
+                            onChange={e => setProfile({ ...profile, github: e.target.value })}
+                            className="w-full p-3 rounded-xl bg-secondary/50 border border-white/5 focus:ring-1 focus:ring-primary outline-none"
+                            placeholder="https://github.com/username"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1.5">LinkedIn URL</label>
+                        <input
+                            type="url"
+                            value={profile.linkedin}
+                            onChange={e => setProfile({ ...profile, linkedin: e.target.value })}
+                            className="w-full p-3 rounded-xl bg-secondary/50 border border-white/5 focus:ring-1 focus:ring-primary outline-none"
+                            placeholder="https://linkedin.com/in/username"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1.5">Twitter / X URL</label>
+                        <input
+                            type="url"
+                            value={profile.twitter}
+                            onChange={e => setProfile({ ...profile, twitter: e.target.value })}
+                            className="w-full p-3 rounded-xl bg-secondary/50 border border-white/5 focus:ring-1 focus:ring-primary outline-none"
+                            placeholder="https://twitter.com/username"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1.5">Facebook URL</label>
+                        <input
+                            type="url"
+                            value={profile.facebook}
+                            onChange={e => setProfile({ ...profile, facebook: e.target.value })}
+                            className="w-full p-3 rounded-xl bg-secondary/50 border border-white/5 focus:ring-1 focus:ring-primary outline-none"
+                            placeholder="https://facebook.com/username"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1.5">Instagram URL</label>
+                        <input
+                            type="url"
+                            value={profile.instagram}
+                            onChange={e => setProfile({ ...profile, instagram: e.target.value })}
+                            className="w-full p-3 rounded-xl bg-secondary/50 border border-white/5 focus:ring-1 focus:ring-primary outline-none"
+                            placeholder="https://instagram.com/username"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1.5">Personal Website</label>
+                        <input
+                            type="url"
+                            value={profile.website}
+                            onChange={e => setProfile({ ...profile, website: e.target.value })}
+                            className="w-full p-3 rounded-xl bg-secondary/50 border border-white/5 focus:ring-1 focus:ring-primary outline-none"
+                            placeholder="https://example.com"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div className="pt-2 flex justify-end">
+                <button
+                    type="submit"
+                    disabled={loading}
+                    className="px-8 py-3.5 bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                >
+                    {loading ? <Loader2 className="animate-spin" size={18} /> : "Save Profile Details"}
+                </button>
+            </div>
+        </form>
     );
 }

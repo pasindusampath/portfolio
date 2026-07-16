@@ -409,3 +409,52 @@ export async function addFootprint(footprint: Footprint): Promise<boolean> {
         return false;
     }
 }
+
+export async function updateProfile(profile: Partial<Profile>): Promise<boolean> {
+  try {
+    const current = await getProfile();
+    const merged = {
+      name: profile.name !== undefined ? profile.name : (current?.name || ''),
+      role: profile.role !== undefined ? profile.role : (current?.role || ''),
+      bio: profile.bio !== undefined ? profile.bio : (current?.bio || ''),
+      email: profile.email !== undefined ? profile.email : (current?.email || ''),
+      avatarUrl: profile.avatarUrl !== undefined ? profile.avatarUrl : (current?.avatarUrl || ''),
+      socials: {
+        github: profile.socials?.github !== undefined ? profile.socials.github : (current?.socials?.github || ''),
+        linkedin: profile.socials?.linkedin !== undefined ? profile.socials.linkedin : (current?.socials?.linkedin || ''),
+        twitter: profile.socials?.twitter !== undefined ? profile.socials.twitter : (current?.socials?.twitter || ''),
+        facebook: profile.socials?.facebook !== undefined ? profile.socials.facebook : (current?.socials?.facebook || ''),
+        instagram: profile.socials?.instagram !== undefined ? profile.socials.instagram : (current?.socials?.instagram || ''),
+        website: profile.socials?.website !== undefined ? profile.socials.website : (current?.socials?.website || ''),
+      }
+    };
+
+    const values = [
+      ['name', merged.name],
+      ['role', merged.role],
+      ['bio', merged.bio],
+      ['email', merged.email],
+      ['avatarUrl', merged.avatarUrl],
+      ['github', merged.socials.github],
+      ['linkedin', merged.socials.linkedin],
+      ['twitter', merged.socials.twitter],
+      ['facebook', merged.socials.facebook],
+      ['instagram', merged.socials.instagram],
+      ['website', merged.socials.website],
+    ];
+
+    await sheets.spreadsheets.values.update({
+      spreadsheetId: SPREADSHEET_ID,
+      range: `${SHEET_PROFILE}!A2:B12`,
+      valueInputOption: 'USER_ENTERED',
+      requestBody: {
+        values,
+      },
+    });
+
+    return true;
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    return false;
+  }
+}
