@@ -59,3 +59,7 @@ export interface Footprint {
   createdAt: string;
 }
 
+export interface DailyNote {
+  date: string;
+  content: string;
+}

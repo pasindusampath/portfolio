@@ -22,6 +22,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
 
 import { StarsBackground } from "@/components/ui/stars-background";
@@ -252,6 +253,7 @@ const TESTIMONIALS = [
     linkedin: "https://www.linkedin.com/in/dasuni-wickramasinghe-95b9b428a",
     initials: "DW",
     gradient: "from-violet-500 to-purple-600",
+    image: "https://res.cloudinary.com/dkrxyiio0/image/upload/v1784234830/testimonialTwo_milyt5.png",
   },
   {
     name: "Nadun Randheera",
@@ -264,6 +266,7 @@ const TESTIMONIALS = [
     website: "https://nadundev.netlify.app/",
     initials: "NR",
     gradient: "from-cyan-500 to-blue-600",
+    image: "https://res.cloudinary.com/dkrxyiio0/image/upload/v1784234835/testimonialOne_rgnhuk.png",
   },
   {
     name: "Imasha Ekanayake",
@@ -275,6 +278,7 @@ const TESTIMONIALS = [
     linkedin: "https://www.linkedin.com/in/imasha-ekanayake-271a5b2ab",
     initials: "IE",
     gradient: "from-emerald-500 to-teal-600",
+    image: "https://res.cloudinary.com/dkrxyiio0/image/upload/v1784234829/testimonialThree_vr8tas.png",
   },
   {
     name: "Waruna Liyanapathirana",
@@ -287,6 +291,7 @@ const TESTIMONIALS = [
     website: "https://warundev.netlify.app/",
     initials: "WL",
     gradient: "from-amber-500 to-orange-600",
+    image: "https://res.cloudinary.com/dkrxyiio0/image/upload/v1784234830/testimonialFour_aj4npv.png",
   },
   {
     name: "Malindu Sakuntha",
@@ -298,6 +303,7 @@ const TESTIMONIALS = [
     linkedin: "https://www.linkedin.com/in/malindu-sakuntha-3b1979337",
     initials: "MS",
     gradient: "from-pink-500 to-rose-600",
+    image: "https://res.cloudinary.com/dkrxyiio0/image/upload/v1784234830/testimonialFive_sffebc.png",
   },
   {
     name: "Sanjaya Perera",
@@ -309,6 +315,7 @@ const TESTIMONIALS = [
     linkedin: "https://www.linkedin.com/in/sanjaya-perera-1299b82b9",
     initials: "SP",
     gradient: "from-sky-500 to-indigo-600",
+    image: "https://res.cloudinary.com/dkrxyiio0/image/upload/v1784234977/sanjaya_eti8bl.png",
   },
 ];
 
@@ -367,12 +374,22 @@ function TestimonialCard({
 
       {/* Person info */}
       <div className="flex items-center gap-3">
-        {/* Avatar with initials */}
-        <div
-          className={`w-10 h-10 rounded-full bg-gradient-to-br ${testimonial.gradient} flex items-center justify-center text-white text-xs font-bold flex-shrink-0 shadow-lg`}
-        >
-          {testimonial.initials}
-        </div>
+        {/* Avatar with image or initials */}
+        {testimonial.image ? (
+          <Image
+            src={testimonial.image}
+            alt={testimonial.name}
+            width={40}
+            height={40}
+            className="rounded-full object-cover shadow-lg"
+          />
+        ) : (
+          <div
+            className={`w-10 h-10 rounded-full bg-gradient-to-br ${testimonial.gradient} flex items-center justify-center text-white text-xs font-bold flex-shrink-0 shadow-lg`}
+          >
+            {testimonial.initials}
+          </div>
+        )}
 
         <div className="flex-1 min-w-0">
           <h4 className="text-sm font-semibold text-white truncate">

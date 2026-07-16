@@ -98,6 +98,45 @@ export async function getSkills(): Promise<Skill[]> {
   }
 }
 
+// Daily Notes Sheet
+const SHEET_DAILY_NOTES = 'DailyNotes';
+
+export async function getDailyNotes(): Promise<{date:string; content:string}[]> {
+  try {
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId: SPREADSHEET_ID,
+      range: `${SHEET_DAILY_NOTES}!A2:B`,
+    });
+    const rows = response.data.values || [];
+    const notes = rows.map((row) => ({
+      date: row[0] || '',
+      content: row[1] || '',
+    }));
+    // Sort newest first
+    notes.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    return notes;
+  } catch (error) {
+    console.error('Error fetching daily notes:', error);
+    return [];
+  }
+}
+
+export async function addDailyNote(note: {date:string; content:string}): Promise<boolean> {
+  try {
+    const values = [[note.date, note.content]];
+    await sheets.spreadsheets.values.append({
+      spreadsheetId: SPREADSHEET_ID,
+      range: `${SHEET_DAILY_NOTES}!A:B`,
+      valueInputOption: 'USER_ENTERED',
+      requestBody: { values },
+    });
+    return true;
+  } catch (error) {
+    console.error('Error adding daily note:', error);
+    return false;
+  }
+}
+
 // Add function to append a new project (for Admin)
 export async function addProject(project: Partial<Project>): Promise<boolean> {
   try {

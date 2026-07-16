@@ -1,12 +1,13 @@
-import { getProfile, getSkills } from '@/lib/google-sheets';
+import { getProfile, getSkills, getDailyNotes } from '@/lib/google-sheets';
 import Image from 'next/image';
 import { Github, Linkedin, Twitter, Facebook, Instagram, Hash } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import DailyNotes from "./DailyNotes";
 
 export const revalidate = 60;
 
 export default async function AboutPage() {
-    const [profile, skills] = await Promise.all([getProfile(), getSkills()]);
+    const [profile, skills, dailyNotes] = await Promise.all([getProfile(), getSkills(), getDailyNotes()]);
 
     if (!profile) {
         return (
@@ -106,6 +107,7 @@ export default async function AboutPage() {
                     </div>
                 </div>
             )}
+        <DailyNotes notes={dailyNotes} />
         </div>
     );
 }

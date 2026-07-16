@@ -14,6 +14,7 @@ const SHEET_TITLES = {
   USERS: 'Users',
   TOKENS: 'Tokens',
   REVOKED_TOKENS: 'RevokedTokens',
+  DAILY_NOTES: 'DailyNotes',
 };
 
 const HEADERS = {
@@ -34,6 +35,9 @@ const HEADERS = {
   ],
   [SHEET_TITLES.REVOKED_TOKENS]: [
     'token_id', 'user_id', 'device_id', 'revoked_at', 'reason'
+  ],
+  [SHEET_TITLES.DAILY_NOTES]: [
+    'date', 'content'
   ]
 };
 

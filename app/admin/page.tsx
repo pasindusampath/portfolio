@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Upload, Plus, LayoutDashboard, FolderKanban, Settings, LogOut, Search, X } from "lucide-react";
+import { Loader2, Upload, Plus, LayoutDashboard, FolderKanban, Settings, LogOut, Search, X, StickyNote, Trash2, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { getDeviceId } from "@/lib/device";
@@ -19,7 +19,7 @@ export default function AdminPage() {
     const [isLoadingProjects, setIsLoadingProjects] = useState(false);
 
     // View State
-    const [activeTab, setActiveTab] = useState<"dashboard" | "projects" | "settings">("projects");
+    const [activeTab, setActiveTab] = useState<"dashboard" | "projects" | "settings" | "notes">("projects");
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
     // Auth 
@@ -147,6 +147,12 @@ export default function AdminPage() {
                         onClick={() => setActiveTab("projects")}
                     />
                     <SidebarItem
+                        icon={StickyNote}
+                        label="Daily Notes"
+                        active={activeTab === "notes"}
+                        onClick={() => setActiveTab("notes")}
+                    />
+                    <SidebarItem
                         icon={Settings}
                         label="Settings"
                         active={activeTab === "settings"}
@@ -171,7 +177,8 @@ export default function AdminPage() {
                     <div>
                         <h2 className="text-2xl font-bold">
                             {activeTab === 'projects' ? 'Project Management' :
-                                activeTab === 'dashboard' ? 'Dashboard Overview' : 'Settings'}
+                                activeTab === 'dashboard' ? 'Dashboard Overview' :
+                                activeTab === 'notes' ? 'Daily Notes' : 'Settings'}
                         </h2>
                         <p className="text-muted-foreground text-sm">
                             Manage your portfolio content via Google Sheets
@@ -224,6 +231,10 @@ export default function AdminPage() {
                         <StatCard label="Total Views" value="--" icon={Search} />
                         <StatCard label="Auth Status" value={accessToken ? "Active" : "Inactive"} icon={Settings} />
                     </div>
+                )}
+
+                {activeTab === 'notes' && (
+                    <DailyNotesTab accessToken={accessToken} />
                 )}
 
                 {activeTab === 'settings' && (
@@ -867,5 +878,134 @@ function SettingsTab({ accessToken }: { accessToken: string | null }) {
                 </button>
             </div>
         </form>
+    );
+}
+
+interface DailyNoteItem {
+    date: string;
+    content: string;
+}
+
+function DailyNotesTab({ accessToken }: { accessToken: string | null }) {
+    const [notes, setNotes] = useState<DailyNoteItem[]>([]);
+    const [newNote, setNewNote] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [fetching, setFetching] = useState(true);
+
+    const fetchNotes = useCallback(async () => {
+        try {
+            const res = await fetch("/api/daily-notes");
+            if (res.ok) {
+                const data = await res.json();
+                setNotes(data);
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setFetching(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchNotes();
+    }, [fetchNotes]);
+
+    const handleAddNote = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!newNote.trim()) return;
+        setLoading(true);
+        try {
+            const res = await fetch("/api/daily-notes", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify({ content: newNote.trim() }),
+            });
+            if (res.ok) {
+                setNewNote("");
+                fetchNotes();
+            } else {
+                const data = await res.json();
+                alert(data.error || "Failed to add note");
+            }
+        } catch (err) {
+            alert("Something went wrong");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (fetching) {
+        return (
+            <div className="flex items-center justify-center h-64">
+                <Loader2 className="animate-spin text-primary" size={32} />
+            </div>
+        );
+    }
+
+    return (
+        <div className="max-w-3xl space-y-6 pb-12">
+            {/* Add Note Form */}
+            <form onSubmit={handleAddNote} className="p-6 rounded-2xl bg-card/40 border border-white/5 backdrop-blur-sm space-y-4">
+                <h3 className="text-lg font-semibold border-b border-white/10 pb-3 flex items-center gap-2">
+                    <StickyNote size={20} className="text-primary" />
+                    Post a New Note
+                </h3>
+                <textarea
+                    required
+                    rows={3}
+                    value={newNote}
+                    onChange={e => setNewNote(e.target.value)}
+                    placeholder="What's on your mind today?"
+                    className="w-full p-3 rounded-xl bg-secondary/50 border border-white/5 focus:ring-1 focus:ring-primary outline-none leading-relaxed text-sm resize-none"
+                />
+                <div className="flex justify-end">
+                    <button
+                        type="submit"
+                        disabled={loading || !newNote.trim()}
+                        className="px-6 py-2.5 bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {loading ? <Loader2 className="animate-spin" size={16} /> : <Send size={16} />}
+                        {loading ? "Posting..." : "Post Note"}
+                    </button>
+                </div>
+            </form>
+
+            {/* Existing Notes */}
+            <div className="space-y-3">
+                <h3 className="text-lg font-semibold">All Notes ({notes.length})</h3>
+                {notes.length === 0 ? (
+                    <div className="text-center py-16 bg-card/20 rounded-2xl border border-white/5 border-dashed">
+                        <StickyNote className="mx-auto h-12 w-12 text-muted-foreground opacity-50 mb-4" />
+                        <h4 className="text-lg font-medium">No notes yet</h4>
+                        <p className="text-muted-foreground text-sm">Write your first daily note above.</p>
+                    </div>
+                ) : (
+                    notes.map((note, i) => (
+                        <motion.div
+                            key={`${note.date}-${i}`}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: i * 0.05 }}
+                            className="p-4 rounded-xl bg-card/40 border border-white/5 backdrop-blur-sm hover:border-primary/20 transition-colors"
+                        >
+                            <p className="text-sm text-muted-foreground mb-2">
+                                {new Date(note.date).toLocaleDateString('en-US', {
+                                    weekday: 'short',
+                                    year: 'numeric',
+                                    month: 'short',
+                                    day: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                })}
+                            </p>
+                            <p className="text-foreground leading-relaxed whitespace-pre-wrap">{note.content}</p>
+                        </motion.div>
+                    ))
+                )}
+            </div>
+        </div>
     );
 }
