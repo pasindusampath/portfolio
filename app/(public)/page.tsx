@@ -629,8 +629,8 @@ export default function Home() {
 
       {/* ═══════════════ KUNG FU PANDA QUOTE SECTION ═══════════════ */}
       <section className="relative py-24 px-4 overflow-hidden border-y border-white/[0.02] bg-gradient-to-b from-transparent via-white/[0.01] to-transparent">
-        {/* Dynamic ambient background glow */}
-        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] ${activeQuote.bgGlow} rounded-full blur-[130px] pointer-events-none transition-all duration-1000`} />
+        {/* Dynamic ambient background glow (snaps instantly for high mobile performance) */}
+        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] ${activeQuote.bgGlow} rounded-full blur-[130px] pointer-events-none`} />
 
         <div ref={quoteRef} className="max-w-3xl mx-auto relative z-10">
           {/* Desktop Nav Controls */}
@@ -653,16 +653,16 @@ export default function Home() {
             </button>
           </div>
 
-          {/* Main Glassmorphic Card */}
+          {/* Main Glassmorphic Card (Optimized: only fades in to prevent backdrop-blur redrawing lag on mobile Safari) */}
           <motion.div
-            initial={{ opacity: 0, y: 40, scale: 0.98 }}
-            animate={quoteInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="relative p-8 md:p-16 rounded-3xl bg-white/[0.015] border border-white/[0.05] backdrop-blur-md overflow-hidden text-center group hover:bg-white/[0.025] transition-all duration-700 shadow-2xl min-h-[360px] md:min-h-[400px] flex flex-col justify-center"
+            initial={{ opacity: 0 }}
+            animate={quoteInView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="relative p-8 md:p-16 rounded-3xl bg-white/[0.015] border border-white/[0.05] backdrop-blur-md overflow-hidden text-center shadow-2xl min-h-[360px] md:min-h-[400px] flex flex-col justify-center transform-gpu"
           >
             {/* Dynamic Ambient Corner Accents */}
-            <div className={`absolute -top-10 -right-10 w-24 h-24 ${activeQuote.cornerGlow} rounded-full blur-xl transition-all duration-1000`} />
-            <div className={`absolute -bottom-10 -left-10 w-24 h-24 ${activeQuote.cornerGlow} opacity-50 rounded-full blur-xl transition-all duration-1000`} />
+            <div className={`absolute -top-10 -right-10 w-24 h-24 ${activeQuote.cornerGlow} rounded-full blur-xl`} />
+            <div className={`absolute -bottom-10 -left-10 w-24 h-24 ${activeQuote.cornerGlow} opacity-50 rounded-full blur-xl`} />
 
             <AnimatePresence mode="wait" custom={slideDirection}>
               <motion.div
