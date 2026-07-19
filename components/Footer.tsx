@@ -8,7 +8,7 @@ export default function Footer() {
                 <div className="flex flex-col md:flex-row items-center justify-between gap-6">
 
                     <div className="text-center md:text-left space-y-2">
-                        <h3 className="font-bold text-lg">Pasindu Sampath</h3>
+                        {/* <h3 className="font-bold text-lg">Pasindu Sampath</h3> */}
                         <p className="text-sm text-muted-foreground max-w-xs">
                             Building digital experiences with passion and precision.
                         </p>
