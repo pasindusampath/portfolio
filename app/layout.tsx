@@ -123,6 +123,22 @@ export default function RootLayout({
         <link rel="author" href="/humans.txt" />
         <PersonJsonLd />
         <WebSiteJsonLd />
+        {process.env.NODE_ENV === "development" && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                (function () {
+                  var script = document.createElement('script');
+                  script.src = "https://cdn.jsdelivr.net/npm/eruda";
+                  document.head.appendChild(script);
+                  script.onload = function () {
+                    eruda.init();
+                  }
+                })();
+              `,
+            }}
+          />
+        )}
       </head>
       <body className={outfit.className} suppressHydrationWarning>
         {children}

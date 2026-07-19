@@ -257,7 +257,7 @@ function TestimonialCard({
         duration: 0.5,
         ease: "easeOut",
       }}
-      className="group relative flex flex-col p-5 md:p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.08] hover:bg-white/[0.06] hover:border-white/[0.15] transition-all duration-300"
+      className="group relative flex flex-col p-5 md:p-6 rounded-2xl bg-neutral-900/60 md:bg-white/[0.03] md:backdrop-blur-sm border border-white/[0.08] hover:bg-white/[0.06] hover:border-white/[0.15] transition-all duration-300"
     >
       {/* Quote icon */}
       <Quote
@@ -445,6 +445,15 @@ export default function Home() {
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
   const [slideDirection, setSlideDirection] = useState(0);
 
+  useEffect(() => {
+    console.log("🔍 [SEO Portfolio Debug] useInView States:", {
+      journeyInView,
+      quoteInView,
+      beyondInView,
+      reviewsInView,
+    });
+  }, [journeyInView, quoteInView, beyondInView, reviewsInView]);
+
   const handlePrevQuote = () => {
     setSlideDirection(-1);
     setCurrentQuoteIndex((prev) => (prev === 0 ? QUOTES.length - 1 : prev - 1));
@@ -492,8 +501,8 @@ export default function Home() {
         </div>
 
         {/* Ambient gradient orbs */}
-        <div className="absolute top-1/3 -left-40 w-80 h-80 bg-violet-600/15 rounded-full blur-[140px] pointer-events-none" />
-        <div className="absolute bottom-1/3 -right-40 w-80 h-80 bg-purple-600/10 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute top-1/3 -left-40 w-80 h-80 bg-violet-600/15 rounded-full blur-[140px] pointer-events-none hidden md:block" />
+        <div className="absolute bottom-1/3 -right-40 w-80 h-80 bg-purple-600/10 rounded-full blur-[140px] pointer-events-none hidden md:block" />
 
         <div className="relative z-10 space-y-8 max-w-4xl">
           {/* Badge */}
@@ -590,7 +599,7 @@ export default function Home() {
       {/* ═══════════════ JOURNEY SECTION ═══════════════ */}
       <section className="relative py-20 md:py-28 px-4">
         {/* Ambient glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-violet-600/8 rounded-full blur-[180px] pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-violet-600/8 rounded-full blur-[180px] pointer-events-none hidden md:block" />
 
         {/* Section header */}
         <div ref={journeyRef} className="max-w-3xl mx-auto mb-14 md:mb-16 text-center">
@@ -630,14 +639,14 @@ export default function Home() {
       {/* ═══════════════ KUNG FU PANDA QUOTE SECTION ═══════════════ */}
       <section className="relative py-24 px-4 overflow-hidden border-y border-white/[0.02] bg-gradient-to-b from-transparent via-white/[0.01] to-transparent">
         {/* Dynamic ambient background glow (snaps instantly for high mobile performance) */}
-        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] ${activeQuote.bgGlow} rounded-full blur-[130px] pointer-events-none`} />
+        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] ${activeQuote.bgGlow} rounded-full blur-[130px] pointer-events-none hidden md:block`} />
 
         <div ref={quoteRef} className="max-w-3xl mx-auto relative z-10">
           {/* Desktop Nav Controls */}
           <div className="absolute top-1/2 -left-16 -translate-y-1/2 hidden md:block z-20">
             <button 
               onClick={handlePrevQuote}
-              className="w-11 h-11 rounded-full border border-white/[0.06] bg-black/40 backdrop-blur-md flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-all active:scale-95 cursor-pointer shadow-lg hover:bg-black/60"
+              className="w-11 h-11 rounded-full border border-white/[0.06] bg-neutral-900 md:bg-black/40 md:backdrop-blur-md flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-all active:scale-95 cursor-pointer shadow-lg hover:bg-black/60"
               aria-label="Previous quote"
             >
               <ChevronLeft size={18} />
@@ -646,7 +655,7 @@ export default function Home() {
           <div className="absolute top-1/2 -right-16 -translate-y-1/2 hidden md:block z-20">
             <button 
               onClick={handleNextQuote}
-              className="w-11 h-11 rounded-full border border-white/[0.06] bg-black/40 backdrop-blur-md flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-all active:scale-95 cursor-pointer shadow-lg hover:bg-black/60"
+              className="w-11 h-11 rounded-full border border-white/[0.06] bg-neutral-900 md:bg-black/40 md:backdrop-blur-md flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-all active:scale-95 cursor-pointer shadow-lg hover:bg-black/60"
               aria-label="Next quote"
             >
               <ChevronRight size={18} />
@@ -658,11 +667,11 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={quoteInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="relative p-8 md:p-16 rounded-3xl bg-white/[0.015] border border-white/[0.05] backdrop-blur-md overflow-hidden text-center shadow-2xl min-h-[360px] md:min-h-[400px] flex flex-col justify-center transform-gpu"
+            className="relative p-8 md:p-16 rounded-3xl bg-neutral-900/60 md:bg-white/[0.015] border border-white/[0.05] md:backdrop-blur-md overflow-hidden text-center shadow-2xl min-h-[360px] md:min-h-[400px] flex flex-col justify-center transform-gpu"
           >
             {/* Dynamic Ambient Corner Accents */}
-            <div className={`absolute -top-10 -right-10 w-24 h-24 ${activeQuote.cornerGlow} rounded-full blur-xl`} />
-            <div className={`absolute -bottom-10 -left-10 w-24 h-24 ${activeQuote.cornerGlow} opacity-50 rounded-full blur-xl`} />
+            <div className={`absolute -top-10 -right-10 w-24 h-24 ${activeQuote.cornerGlow} rounded-full blur-xl hidden md:block`} />
+            <div className={`absolute -bottom-10 -left-10 w-24 h-24 ${activeQuote.cornerGlow} opacity-50 rounded-full blur-xl hidden md:block`} />
 
             <AnimatePresence mode="wait" custom={slideDirection}>
               <motion.div
@@ -752,8 +761,8 @@ export default function Home() {
       {/* ═══════════════ BEYOND THE CODE SECTION ═══════════════ */}
       <section className="relative py-20 md:py-28 px-4 overflow-hidden">
         {/* Ambient glows */}
-        <div className="absolute top-1/4 -right-40 w-80 h-80 bg-amber-500/8 rounded-full blur-[160px] pointer-events-none" />
-        <div className="absolute bottom-1/4 -left-40 w-80 h-80 bg-pink-500/8 rounded-full blur-[160px] pointer-events-none" />
+        <div className="absolute top-1/4 -right-40 w-80 h-80 bg-amber-500/8 rounded-full blur-[160px] pointer-events-none hidden md:block" />
+        <div className="absolute bottom-1/4 -left-40 w-80 h-80 bg-pink-500/8 rounded-full blur-[160px] pointer-events-none hidden md:block" />
 
         {/* Section header */}
         <div ref={beyondRef} className="max-w-3xl mx-auto mb-14 md:mb-16 text-center">
@@ -801,7 +810,7 @@ export default function Home() {
                   duration: 0.5,
                   ease: "easeOut",
                 }}
-                className="group relative p-5 md:p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.08] hover:bg-white/[0.06] hover:border-white/[0.15] transition-all duration-300 cursor-default"
+                className="group relative p-5 md:p-6 rounded-2xl bg-neutral-900/60 md:bg-white/[0.03] md:backdrop-blur-sm border border-white/[0.08] hover:bg-white/[0.06] hover:border-white/[0.15] transition-all duration-300 cursor-default"
               >
                 {/* Icon circle */}
                 <div
@@ -841,8 +850,8 @@ export default function Home() {
       {/* ═══════════════ TESTIMONIALS SECTION ═══════════════ */}
       <section className="relative py-20 md:py-28 px-4 overflow-hidden">
         {/* Ambient glows */}
-        <div className="absolute top-1/3 -left-40 w-80 h-80 bg-cyan-500/8 rounded-full blur-[160px] pointer-events-none" />
-        <div className="absolute bottom-1/4 -right-40 w-80 h-80 bg-teal-500/6 rounded-full blur-[160px] pointer-events-none" />
+        <div className="absolute top-1/3 -left-40 w-80 h-80 bg-cyan-500/8 rounded-full blur-[160px] pointer-events-none hidden md:block" />
+        <div className="absolute bottom-1/4 -right-40 w-80 h-80 bg-teal-500/6 rounded-full blur-[160px] pointer-events-none hidden md:block" />
 
         {/* Section header */}
         <div ref={reviewsRef} className="max-w-5xl mx-auto mb-14 md:mb-16 text-center">
