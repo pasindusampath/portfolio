@@ -107,7 +107,7 @@ function Milestone({
   index: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const isInView = useInView(ref, { once: true, margin: "-20px" });
   const { Icon } = milestone;
 
   return (
@@ -434,13 +434,13 @@ const CONTENT_TRAITS = [
 
 export default function Home() {
   const journeyRef = useRef<HTMLDivElement>(null);
-  const journeyInView = useInView(journeyRef, { once: true, margin: "-80px" });
+  const journeyInView = useInView(journeyRef, { once: true, margin: "-20px" });
   const beyondRef = useRef<HTMLDivElement>(null);
-  const beyondInView = useInView(beyondRef, { once: true, margin: "-80px" });
+  const beyondInView = useInView(beyondRef, { once: true, margin: "-20px" });
   const reviewsRef = useRef<HTMLDivElement>(null);
-  const reviewsInView = useInView(reviewsRef, { once: true, margin: "-80px" });
+  const reviewsInView = useInView(reviewsRef, { once: true, margin: "-20px" });
   const quoteRef = useRef<HTMLDivElement>(null);
-  const quoteInView = useInView(quoteRef, { once: true, margin: "-80px" });
+  const quoteInView = useInView(quoteRef, { once: true, margin: "-20px" });
 
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
   const [slideDirection, setSlideDirection] = useState(0);

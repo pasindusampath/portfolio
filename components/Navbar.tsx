@@ -66,7 +66,7 @@ export default function Navbar() {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="md:hidden absolute top-16 left-0 w-full bg-black/85 backdrop-blur-md border-b border-white/[0.08] py-5 px-6 flex flex-col items-end gap-5 shadow-xl"
+                    className="md:hidden absolute top-16 left-0 w-full bg-gradient-to-b from-purple-950/80 via-black/90 to-black/95 backdrop-blur-md border-b border-purple-500/10 py-5 px-6 flex flex-col items-end gap-5 shadow-2xl"
                 >
                     {links.map((link) => (
                         <Link
