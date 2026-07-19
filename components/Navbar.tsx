@@ -63,10 +63,10 @@ export default function Navbar() {
             {/* Mobile Menu */}
             {isOpen && (
                 <motion.div
-                    initial={{ opacity: 0, y: -20 }}
+                    initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    className="md:hidden absolute top-16 left-0 w-full bg-background border-b p-4 flex flex-col gap-4 shadow-lg"
+                    exit={{ opacity: 0, y: -10 }}
+                    className="md:hidden absolute top-16 left-0 w-full bg-black/85 backdrop-blur-md border-b border-white/[0.08] py-5 px-6 flex flex-col items-end gap-5 shadow-xl"
                 >
                     {links.map((link) => (
                         <Link
@@ -74,9 +74,9 @@ export default function Navbar() {
                             href={link.href}
                             onClick={() => setIsOpen(false)}
                             className={cn(
-                                "text-sm font-medium transition-colors hover:text-primary",
+                                "text-sm font-semibold transition-colors hover:text-primary tracking-wide py-1 px-2 rounded-md hover:bg-white/[0.03]",
                                 pathname === link.href
-                                    ? "text-foreground"
+                                    ? "text-primary"
                                     : "text-muted-foreground"
                             )}
                         >
