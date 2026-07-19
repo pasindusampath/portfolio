@@ -29,6 +29,7 @@ import { StarsBackground } from "@/components/ui/stars-background";
 import { ShootingStars } from "@/components/ui/shooting-stars";
 import FootprintCanvas from "@/components/FootprintCanvas";
 import FootprintPrompt from "@/components/FootprintPrompt";
+import ScrollDatePicker from "@/components/ScrollDatePicker";
 
 /* ─────────────────────────────────────────────
    Constants
@@ -700,24 +701,11 @@ export default function Home() {
                 </button>
               </div>
             ) : showDatePicker ? (
-              /* Show date input */
-              <div className="flex items-center gap-2">
-                <input
-                  type="date"
-                  value={visitorBirthday}
-                  onChange={(e) => setVisitorBirthday(e.target.value)}
-                  max={new Date().toISOString().split("T")[0]}
-                  className="px-4 py-2 rounded-full bg-white/[0.05] border border-white/[0.1] text-white text-sm focus:border-violet-500/50 outline-none transition-all [color-scheme:dark]"
-                  id="visitor-birthday-input"
-                  autoFocus
-                />
-                <button
-                  onClick={() => setShowDatePicker(false)}
-                  className="text-xs text-gray-500 hover:text-gray-300 transition-colors"
-                >
-                  Cancel
-                </button>
-              </div>
+              /* Show scroll date picker */
+              <ScrollDatePicker
+                onSelect={(dateStr) => setVisitorBirthday(dateStr)}
+                onCancel={() => setShowDatePicker(false)}
+              />
             ) : (
               /* Show calculate button */
               <button
