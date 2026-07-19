@@ -119,13 +119,13 @@ function Milestone({
       className="relative flex items-start gap-5 md:gap-6 group"
     >
       {/* Timeline dot */}
-      <div className="relative z-10 flex-shrink-0 w-11 h-11 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-violet-500/20 to-purple-600/20 border border-violet-500/30 flex items-center justify-center group-hover:from-violet-500/40 group-hover:to-purple-600/40 group-hover:border-violet-500/50 transition-all duration-300 shadow-lg shadow-violet-500/5">
-        <Icon size={18} className="text-violet-400 md:w-5 md:h-5" />
+      <div className="relative z-10 flex-shrink-0 w-11 h-11 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-neutral-800/30 to-zinc-900/30 border border-neutral-800 flex items-center justify-center group-hover:from-neutral-700/40 group-hover:to-zinc-800/40 group-hover:border-neutral-600 transition-all duration-300 shadow-lg">
+        <Icon size={18} className="text-zinc-300 md:w-5 md:h-5" />
       </div>
 
       {/* Content card */}
       <div className="flex-1 pb-10 md:pb-12">
-        <span className="inline-block px-3 py-1 rounded-full text-[11px] font-medium tracking-wide bg-violet-500/10 text-violet-400 border border-violet-500/20 mb-3">
+        <span className="inline-block px-3 py-1 rounded-full text-[11px] font-medium tracking-wide bg-neutral-900 text-zinc-300 border border-neutral-800 mb-3">
           {milestone.date}
         </span>
         <h3 className="text-lg md:text-xl font-semibold text-white mb-2">
@@ -165,7 +165,7 @@ const TESTIMONIALS = [
       "I recently completed a course on CodeSchool.lk with Pasindu Sampath, covering Java fundamentals, MySQL Databases, Spring Boot, and OOP concepts. His teaching approach is exceptional! He makes even the hardest of concepts look very simple and interesting thus easy for people who have no experience, while at the same time providing valuable insight for experienced persons. Today, because of his practical explanations, I feel that I have a good understanding of these technologies and therefore can see myself using them in real-life situations. For those who want to improve their programming skills, I recommend his courses without any hesitation.",
     linkedin: "https://www.linkedin.com/in/dasuni-wickramasinghe-95b9b428a",
     initials: "DW",
-    gradient: "from-violet-500 to-purple-600",
+    gradient: "from-zinc-700 to-neutral-800",
     image: "https://res.cloudinary.com/dkrxyiio0/image/upload/v1784234830/testimonialTwo_milyt5.png",
   },
   {
@@ -510,7 +510,7 @@ export default function Home() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-block px-4 py-1.5 rounded-full border border-violet-500/20 bg-violet-500/10 text-violet-400 text-sm font-medium tracking-wide"
+            className="inline-block px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-zinc-300 text-sm font-medium tracking-wide"
           >
             Software Engineer
           </motion.span>
@@ -607,7 +607,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 10 }}
             animate={journeyInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5 }}
-            className="inline-block px-4 py-1.5 rounded-full border border-violet-500/20 bg-violet-500/10 text-violet-400 text-sm font-medium tracking-wide mb-5"
+            className="inline-block px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-zinc-300 text-sm font-medium tracking-wide mb-5"
           >
             The Path So Far
           </motion.span>
@@ -624,7 +624,7 @@ export default function Home() {
         {/* Timeline */}
         <div className="relative max-w-2xl mx-auto">
           {/* Vertical gradient line */}
-          <div className="absolute left-[21px] md:left-[23px] top-0 bottom-0 w-px bg-gradient-to-b from-violet-500/50 via-purple-500/20 to-transparent" />
+          <div className="absolute left-[21px] md:left-[23px] top-0 bottom-0 w-px bg-gradient-to-b from-zinc-700/50 via-neutral-800/20 to-transparent" />
 
           {MILESTONES.map((milestone, index) => (
             <Milestone

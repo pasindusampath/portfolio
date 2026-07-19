@@ -62,8 +62,8 @@ export default function FootprintPrompt() {
           className="fixed bottom-6 right-6 z-40 max-w-sm p-4 rounded-2xl bg-black/80 backdrop-blur-xl border border-white/10 shadow-2xl flex items-start gap-3"
         >
           {/* Sparkle Icon */}
-          <div className="p-2 rounded-xl bg-violet-500/10 border border-violet-500/20 text-violet-400 flex-shrink-0 animate-pulse">
-            <Sparkles className="w-4 h-4 text-violet-400 fill-violet-400" />
+          <div className="p-2 rounded-xl bg-white/10 border border-white/20 text-white flex-shrink-0 animate-pulse">
+            <Sparkles className="w-4 h-4 text-white fill-white" />
           </div>
 
           {/* Prompt Body */}
@@ -77,7 +77,7 @@ export default function FootprintPrompt() {
             <div className="flex items-center gap-3 pt-1">
               <button
                 onClick={handleAction}
-                className="text-[10px] font-bold text-violet-400 hover:text-violet-300 transition-colors uppercase tracking-wider cursor-pointer"
+                className="text-[10px] font-bold text-white hover:text-zinc-300 transition-colors uppercase tracking-wider cursor-pointer"
               >
                 Plant Star
               </button>

@@ -162,7 +162,7 @@ function WheelColumn({ items, selectedValue, onChange, width = "w-20" }: WheelCo
 
       {/* Selection highlight */}
       <div
-        className="absolute left-0 right-0 z-[5] border-y border-violet-500/30 bg-violet-500/[0.08] rounded-lg pointer-events-none"
+        className="absolute left-0 right-0 z-[5] border-y border-white/10 bg-white/5 rounded-lg pointer-events-none"
         style={{
           top: CENTER_INDEX * ITEM_HEIGHT,
           height: ITEM_HEIGHT,
@@ -314,7 +314,7 @@ export default function ScrollDatePicker({ onSelect, onCancel }: ScrollDatePicke
             disabled={!isValid}
             className={`px-5 py-2 rounded-full text-xs font-medium transition-all ${
               isValid
-                ? "bg-violet-500/20 text-violet-300 border border-violet-500/30 hover:bg-violet-500/30 hover:text-violet-200"
+                ? "bg-white text-black hover:bg-zinc-200"
                 : "bg-white/[0.03] text-gray-600 border border-white/[0.05] cursor-not-allowed"
             }`}
           >

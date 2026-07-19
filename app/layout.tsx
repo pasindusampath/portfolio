@@ -10,7 +10,7 @@ const OG_IMAGE =
   "https://res.cloudinary.com/dkrxyiio0/image/upload/v1784234154/portfolio/fpwitz2b2kkvnjiemzkc.png";
 
 export const viewport: Viewport = {
-  themeColor: "#7c3aed",
+  themeColor: "#000000",
   width: "device-width",
   initialScale: 1,
 };
