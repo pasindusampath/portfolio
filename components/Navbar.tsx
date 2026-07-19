@@ -23,7 +23,7 @@ export default function Navbar() {
         <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
             <div className="container flex h-16 items-center justify-between px-4">
                 <div className="text-xl font-bold tracking-tight">
-                    <Link href="/">Portfolio</Link>
+                    <Link href="/">Pasindu Sampath</Link>
                 </div>
 
                 {/* Desktop Nav */}

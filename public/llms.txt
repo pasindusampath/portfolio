@@ -1,0 +1,44 @@
+# Pasindu Sampath
+
+> Personal portfolio and professional profile at pasindusampath.com
+
+## About
+
+Pasindu Sampath is a Software Engineer, Educator, and Content Creator based in Sri Lanka. Born on October 8, 2002, he is a self-taught developer who began programming in April 2021 and landed his first professional Software Engineer role in August 2024.
+
+He is the founder of CodeSchool.lk, an online education platform where he teaches programming to university students across Sri Lanka.
+
+## Links
+
+- Website: https://pasindusampath.com
+- GitHub: https://github.com/pasindusampath
+- LinkedIn: https://www.linkedin.com/in/pasindu-tb/
+- Email: hello@pasindusampath.com
+- CodeSchool: https://codeschool.lk
+
+## Expertise
+
+- Languages: Java, JavaScript, TypeScript, SQL
+- Backend: Spring Boot, Hibernate, Node.js, Next.js API Routes
+- Frontend: React, Next.js, Tailwind CSS, Framer Motion
+- Databases: MySQL, Google Sheets API
+- Tools: Git, Cloudinary, Vercel, JWT Authentication
+
+## Roles
+
+- Software Engineer (since August 2024)
+- Founder & Instructor at CodeSchool.lk
+- Content Creator (comedy/tech content)
+
+## Teaching
+
+Pasindu teaches Java fundamentals, OOP, Data Structures, Spring Boot, Hibernate, MySQL, JavaScript, React, and JavaFX through CodeSchool.lk. He is known for making complex concepts simple and approachable, with students from universities including University of Colombo, University of Jaffna, NSBM Green University, and University of Westminster (IIT).
+
+## Journey
+
+- April 2021: Started self-studying programming from scratch
+- 2021-2022: Mastered OOP and Data Structures
+- 2022-2023: Learned Spring Boot and Hibernate
+- 2023-2024: Mastered databases and MySQL
+- August 2024: First professional Software Engineer role
+- 2024-Present: Growing through team collaboration and mentoring

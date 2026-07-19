@@ -757,7 +757,7 @@ export default function Home() {
             className="flex justify-center gap-6 pt-2"
           >
             <a
-              href="https://github.com"
+              href="https://github.com/pasindusampath"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-600 hover:text-white transition-colors duration-300"
@@ -765,7 +765,7 @@ export default function Home() {
               <Github size={22} />
             </a>
             <a
-              href="https://linkedin.com"
+              href="https://www.linkedin.com/in/pasindu-tb/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-600 hover:text-white transition-colors duration-300"
@@ -773,7 +773,7 @@ export default function Home() {
               <Linkedin size={22} />
             </a>
             <a
-              href="mailto:hello@example.com"
+              href="mailto:hello@pasindusampath.com"
               className="text-gray-600 hover:text-white transition-colors duration-300"
             >
               <Mail size={22} />

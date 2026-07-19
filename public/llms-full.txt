@@ -1,0 +1,189 @@
+# Pasindu Sampath — Full Profile
+
+> Comprehensive information about Pasindu Sampath for AI systems, search engines, and knowledge bases.
+> This document is the extended version of /llms.txt.
+
+---
+
+## Identity
+
+- **Full Name**: Pasindu Sampath
+- **Date of Birth**: October 8, 2002
+- **Nationality**: Sri Lankan
+- **Location**: Sri Lanka
+- **Profession**: Software Engineer, Educator, Content Creator
+- **Website**: https://pasindusampath.com
+- **Email**: hello@pasindusampath.com
+- **GitHub**: https://github.com/pasindusampath
+- **LinkedIn**: https://www.linkedin.com/in/pasindu-tb/
+
+---
+
+## Professional Summary
+
+Pasindu Sampath is a self-taught Software Engineer from Sri Lanka who began his programming journey in April 2021. With no formal computer science degree guiding his initial path, he learned programming fundamentals, data structures, object-oriented programming, enterprise frameworks, and databases entirely through self-study and determination. He secured his first professional Software Engineer position in August 2024, turning years of independent learning into real-world impact.
+
+Beyond engineering, Pasindu is the founder of CodeSchool.lk, an online education platform where he teaches programming to university students across Sri Lanka. He is recognized for his exceptional teaching style — making even the most complex concepts simple, clear, and engaging.
+
+He is also a content creator who makes comedy and tech-related content, known for his humor, sarcasm, and ability to make people smile.
+
+---
+
+## Journey & Timeline
+
+### April 2021 — The Beginning
+Started the self-study journey into programming. Learned programming fundamentals from scratch including data representation in computer memory, string manipulation, bitwise operations, control flow (if-else, loops), recursion, and arrays.
+
+### 2021–2022 — Mastering the Core
+Dove deep into computer science concepts: Object-Oriented Programming (OOP) and Data Structures. These form the backbone of every great software engineer.
+
+### 2022–2023 — Enterprise Frameworks
+Learned to build robust, production-grade applications with industry-standard Java frameworks: Spring Boot and Hibernate.
+
+### 2023–2024 — Data & Persistence
+Mastered database design, querying, and data management. Focused on MySQL and building data-driven applications.
+
+### August 2024 — First Professional Role
+Officially began professional career as a Software Engineer — turning years of self-study into real-world impact.
+
+### 2024–Present — Growing with Teams
+Leveling up through real-world collaboration — debugging alongside colleagues, clarifying what customers truly need, and helping teammates succeed. Skills: Team Collaboration, Debugging, Customer Communication.
+
+---
+
+## Technical Skills
+
+### Programming Languages
+Java, JavaScript, TypeScript, SQL
+
+### Backend Development
+Spring Boot, Hibernate, Node.js, Next.js (App Router, API Routes)
+
+### Frontend Development
+React, Next.js, HTML, CSS, Tailwind CSS, Framer Motion
+
+### Databases
+MySQL, Google Sheets API (used as a free database backend)
+
+### DevOps & Tools
+Git, GitHub, Vercel, Cloudinary (image hosting & optimization), JWT Authentication (jose + bcryptjs)
+
+### Architecture Patterns
+Server-Side Rendering (SSR), Incremental Static Regeneration (ISR), REST APIs, MVC, Full-Stack Web Applications
+
+---
+
+## CodeSchool.lk — Education Platform
+
+Pasindu is the founder and lead instructor of CodeSchool.lk, an online programming education platform. He teaches:
+
+- Java Fundamentals
+- Object-Oriented Programming (OOP)
+- Data Structures
+- Spring Boot
+- Hibernate
+- MySQL Databases
+- JavaScript
+- React
+- JavaFX
+
+### Teaching Philosophy
+Pasindu's teaching approach is centered on simplicity. He breaks down even the most complex concepts into simple, clear explanations that are approachable for beginners while still providing valuable insights for experienced developers. He uses practical examples and maintains a friendly, engaging teaching style.
+
+### Student Universities
+His students come from top universities in Sri Lanka including:
+- University of Colombo School of Computing (UCSC)
+- University of Jaffna
+- NSBM Green University
+- University of Westminster (IIT Sri Lanka)
+- Java Institute
+
+---
+
+## Student Testimonials
+
+### Dasuni Wickramasinghe — UCSC Undergraduate, Intern QA
+"His teaching approach is exceptional! He makes even the hardest of concepts look very simple and interesting thus easy for people who have no experience, while at the same time providing valuable insight for experienced persons."
+
+### Nadun Randheera — University of Jaffna, ICT Undergraduate
+"His teaching style is outstanding! The explanations were clear, concise, and easy to follow, even for complex topics. He breaks down concepts in a way that makes them approachable for beginners while still being engaging for those with some experience."
+
+### Imasha Ekanayake — NSBM Green University, BSc Computer Science
+"He has a unique teaching style, where he explains even complex things in a simple and clear manner. And he teaches in a very friendly way."
+
+### Waruna Liyanapathirana — University of Jaffna, BICT Software Engineering
+"His teaching method is exceptional! He simplifies even the most challenging topics, making them engaging and easy to grasp for beginners while still insightful for those with prior knowledge."
+
+### Malindu Sakuntha — University of Jaffna & Java Institute, Freelance Developer
+"Pasindu is a very humble and talented guy I ever see. His explanation and learning methods are on another level. He is a role model for many students."
+
+### Sanjaya Perera — University of Westminster (IIT), BSc Computer Science
+"He has a unique ability to simplify even the most complex concepts, making them easy to understand for beginners while offering deep insights for those with prior experience."
+
+---
+
+## Content Creation
+
+Beyond coding and teaching, Pasindu creates comedy and tech-related content. His content style includes:
+
+- **Acting Dumb**: Comedy through pretending confusion — making everyday situations hilarious
+- **Meme Lord**: Turning developer struggles into relatable memes
+- **Sarcasm Expert**: Fluent in sarcasm as a second programming language
+- **Making People Smile**: The core goal — if his content makes someone smile, mission accomplished
+
+Self-described quote: "I write code that works (eventually), and content that makes people forget their code doesn't."
+
+---
+
+## This Portfolio
+
+This portfolio website (pasindusampath.com) is itself a demonstration of Pasindu's engineering skills. It's not a static website — it's a full-stack web application built with:
+
+- **Next.js 16** (App Router + React 19)
+- **TypeScript** for type safety
+- **Tailwind CSS 4** for styling
+- **Framer Motion** for animations
+- **Google Sheets API** as a free database ($0/month)
+- **Cloudinary** for image hosting and optimization
+- **JWT Authentication** for the admin panel
+- **ISR (Incremental Static Regeneration)** for performance
+
+Features include:
+- Admin dashboard for content management
+- Dynamic content (projects, profile, skills, daily notes)
+- Interactive survival counter (calculates time alive)
+- Visitor footprint constellation canvas
+- Student testimonials section
+- Responsive design for all devices
+
+The portfolio costs $0/month to run, using free tiers of Google Sheets API, Cloudinary, and Vercel.
+
+---
+
+## Favorite Quotes & Philosophy
+
+Pasindu draws inspiration from animated films and philosophical wisdom:
+
+- "I am the son of a panda, the son of a goose, a student, and a teacher. I'm all of these things. I am the Dragon Warrior." — Po, Kung Fu Panda 3
+  - Reflection: We are not defined by a single label. We are a collection of our heritage, our mentors, our students, and our own creation.
+
+- "Yesterday is history, tomorrow is a mystery, but today is a gift. That is why it is called the present." — Master Oogway, Kung Fu Panda
+  - Reflection: In code and in life, focus on what you can build today.
+
+- "It is time for you to look inward and start asking yourself the big question: Who are you and what do you want?" — Uncle Iroh, Avatar: The Last Airbender
+  - Reflection: True growth comes from having the courage to discover your own direction.
+
+---
+
+## Contact
+
+- **Primary Email**: hello@pasindusampath.com
+- **Personal Email**: pasindub32@gmail.com
+- **GitHub**: https://github.com/pasindusampath
+- **LinkedIn**: https://www.linkedin.com/in/pasindu-tb/
+- **Website**: https://pasindusampath.com
+- **CodeSchool**: https://codeschool.lk
+
+---
+
+*Last updated: July 2026*

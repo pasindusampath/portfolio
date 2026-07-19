@@ -23,8 +23,8 @@ export default function ContactPage() {
                         <Mail size={24} />
                     </div>
                     <h3 className="text-lg font-semibold mb-2">Email Me</h3>
-                    <a href="mailto:hello@example.com" className="text-muted-foreground hover:text-primary transition-colors">
-                        hello@example.com
+                    <a href="mailto:hello@pasindusampath.com" className="text-muted-foreground hover:text-primary transition-colors">
+                        hello@pasindusampath.com
                     </a>
                 </motion.div>
 

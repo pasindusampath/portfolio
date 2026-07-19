@@ -1,0 +1,27 @@
+/* TEAM */
+
+Developer: Pasindu Sampath
+Contact: hello@pasindusampath.com
+GitHub: https://github.com/pasindusampath
+LinkedIn: https://www.linkedin.com/in/pasindu-tb/
+Location: Sri Lanka
+
+/* SITE */
+
+Last update: 2026/07
+Language: English
+Standards: HTML5, CSS3, ECMAScript 2024
+Framework: Next.js 16 (App Router)
+Language: TypeScript
+Styling: Tailwind CSS 4
+Animations: Framer Motion
+Icons: Lucide React
+Database: Google Sheets API
+Image Hosting: Cloudinary
+Authentication: JWT (jose + bcryptjs)
+Hosting: Vercel
+
+/* THANKS */
+
+Students at CodeSchool.lk for their feedback and testimonials.
+Open source community for the amazing tools and frameworks.

@@ -1,0 +1,18 @@
+{
+  "name": "Pasindu Sampath — Portfolio",
+  "short_name": "Pasindu",
+  "description": "Software Engineer, Educator & Content Creator from Sri Lanka. Founder of CodeSchool.lk.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#7c3aed",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["portfolio", "software engineering", "education"]
+}
