@@ -51,6 +51,39 @@ Leveling up through real-world collaboration — debugging alongside colleagues,
 
 ---
 
+## Work Experience
+
+### Softsora — Software Engineer → Associate Software Engineer
+**Period:** August 2024 – Present (~2 years as of August 2026)  
+**Type:** Full-time | **Location:** Sri Lanka  
+**Current Role:** Associate Software Engineer (ASE)
+
+Pasindu joined Softsora as a Junior Software Engineer in August 2024 — his first professional role. Over two years, he has grown into the Associate Software Engineer (ASE) position. During this time he has:
+
+- Contributed to **6+ projects** as a collaborative team member across agile sprints
+- Been **promoted** from Junior Software Engineer to Associate Software Engineer
+- Serves as a **Code Reviewer** — manually reviewing implementations to ensure human-readable, maintainable code that adheres to company-wide coding standards
+- Developed strong **client communication** skills — learning how to understand client needs, manage expectations, and translate real-world business problems into technical solutions
+- Built expertise in **real-world debugging** — understanding how bugs emerge in production systems and developing systematic approaches to resolution
+- Gained full exposure to the **Software Development Life Cycle (SDLC)**: system design, implementation, testing, and agile delivery
+- Plays a key role in **maintaining and raising the engineering quality bar** for the team
+
+**Skills gained:** Agile Development, Code Review, Client Communication, Team Collaboration, System Implementation, Debugging, Coding Standards, SDLC
+
+---
+
+### Cyber Yakku — Backend Engineer
+**Period:** Early experience (before August 2024)  
+**Type:** Collaborative / Team | **Location:** Sri Lanka
+
+Pasindu was involved with the Cyber Yakku team on software development projects serving local Sri Lankan clients. His primary contribution was **server-side development for a mobile application**, where he served as the Backend Engineer within the team. This experience provided practical exposure to client-focused software delivery in a collaborative team setting.
+
+**Skills gained:** Backend Development, Server-Side Development, Mobile App APIs, Client-Focused Development
+
+---
+
+
+
 ## Technical Skills
 
 ### Programming Languages

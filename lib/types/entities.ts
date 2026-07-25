@@ -62,13 +62,33 @@ export interface PersonEntity {
   location: string;
   organizations: OrganizationRef[];
   areasOfSpecialization: string[];
-  lastModified: string;
+  workExperiences: WorkExperience[];
+  lastModified: string;          // ISO 8601
 }
 
 export interface OrganizationRef {
   name: string;
   url: string;
   role: string;
+}
+
+// ─── Work Experience ──────────────────────────────────────
+
+export interface WorkExperience {
+  id: string;
+  company: string;
+  companyUrl?: string;
+  role: string;
+  level: string;                // e.g. "Backend Engineer", "Junior Software Engineer", "ASE"
+  startDate: string;            // ISO 8601 "YYYY-MM"
+  endDate?: string;             // ISO 8601 "YYYY-MM" | undefined = present
+  current: boolean;
+  location: string;             // e.g. "Sri Lanka (Remote)"
+  type: "full-time" | "part-time" | "contract" | "internship" | "collaborative";
+  summary: string;
+  highlights: string[];         // Key achievements / contributions
+  skills: string[];             // Skills gained / used
+  projects?: string[];          // Notable project IDs or names
 }
 
 // ─── Skill ────────────────────────────────────────────────

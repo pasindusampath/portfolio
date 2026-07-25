@@ -1,7 +1,7 @@
 // lib/data/person.ts
 // Canonical Person entity — single source of truth for Pasindu Sampath
 
-import type { PersonEntity } from "@/lib/types/entities";
+import type { PersonEntity, WorkExperience } from "@/lib/types/entities";
 
 export const person: PersonEntity = {
   id: "pasindu-sampath",
@@ -131,6 +131,65 @@ export const person: PersonEntity = {
     "Software Engineering",
     "Content Creation",
   ],
+
+  workExperiences: [
+    {
+      id: "softsora",
+      company: "Softsora",
+      role: "Software Engineer → Associate Software Engineer",
+      level: "Associate Software Engineer (ASE)",
+      startDate: "2024-08",
+      current: true,
+      location: "Sri Lanka",
+      type: "full-time",
+      summary:
+        "Joined Softsora as a Junior Software Engineer in August 2024 and progressed to Associate Software Engineer. Contributed to 6+ projects as a team player across agile development cycles. Responsible for code reviews, enforcing coding standards, client communication, and system implementation.",
+      highlights: [
+        "Contributed to 6+ projects as a full team member across agile sprints",
+        "Promoted from Junior Software Engineer to Associate Software Engineer (ASE)",
+        "Act as code reviewer — manually reviewing implementations for human-readable code and consistent coding standards",
+        "Gained hands-on experience in client communication and translating real-world business problems into technical solutions",
+        "Learned how real-world bugs emerge and developed structured approaches to debugging and resolution",
+        "Exposed to full SDLC: system design, implementation, testing, and delivery in agile teams",
+        "Responsible for maintaining and raising the code quality bar across the engineering team",
+      ],
+      skills: [
+        "Agile Development",
+        "Code Review",
+        "Client Communication",
+        "Team Collaboration",
+        "System Implementation",
+        "Debugging",
+        "Coding Standards",
+        "Software Development Life Cycle (SDLC)",
+      ],
+    },
+    {
+      id: "cyber-yakku",
+      company: "Cyber Yakku",
+      role: "Backend Engineer",
+      level: "Backend Engineer",
+      startDate: "2023-01",
+      endDate: "2024-07",
+      current: false,
+      location: "Sri Lanka",
+      type: "collaborative",
+      summary:
+        "Worked with the Cyber Yakku team on software development projects serving local clients. Primary contribution was server-side development for a mobile application, playing the Backend Engineer role within the team.",
+      highlights: [
+        "Contributed server-side development for a mobile application backend",
+        "Worked with local Sri Lankan clients on software delivery",
+        "Played the Backend Engineer role within the development team",
+        "Gained practical exposure to client-focused software development",
+      ],
+      skills: [
+        "Backend Development",
+        "Server-Side Development",
+        "Mobile App APIs",
+        "Client-Focused Development",
+      ],
+    },
+  ] as WorkExperience[],
 
   lastModified: "2026-07-25",
 };

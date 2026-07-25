@@ -53,6 +53,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     // ─── Knowledge API Endpoints ────────────────────────────
     {
+      url: `${baseUrl}/api/v1/experience`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/api/v1/person`,
       lastModified: now,
       changeFrequency: "monthly",

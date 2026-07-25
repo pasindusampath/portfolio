@@ -32,18 +32,33 @@ export function generatePersonSchema() {
     knowsAbout: person.expertise,
     sameAs: person.socialProfiles.map((p) => p.url),
     email: person.email,
-    worksFor: person.organizations.map((org) => ({
+    worksFor: {
       "@type": "Organization",
-      name: org.name,
-      url: org.url,
-    }))[0],
+      name: person.workExperiences.find((w) => w.current)?.company ?? person.organizations[0]?.name,
+      url: person.workExperiences.find((w) => w.current)?.companyUrl ?? person.organizations[0]?.url,
+    },
     alumniOf: {
       "@type": "Organization",
       name: "CodeSchool.lk",
       url: "https://codeschool.lk",
     },
+    hasOccupation: person.workExperiences.map((exp) => ({
+      "@type": "Role",
+      roleName: exp.role,
+      startDate: exp.startDate,
+      ...(exp.endDate && { endDate: exp.endDate }),
+      hasOccupation: {
+        "@type": "Occupation",
+        name: exp.level,
+        occupationLocation: {
+          "@type": "Country",
+          name: "Sri Lanka",
+        },
+      },
+    })),
   };
 }
+
 
 // ─── WebSite ──────────────────────────────────────────────
 

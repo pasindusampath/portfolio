@@ -43,11 +43,26 @@ Pasindu teaches Java fundamentals, OOP, Data Structures, Spring Boot, Hibernate,
 - August 2024: First professional Software Engineer role
 - 2024-Present: Growing through team collaboration and mentoring
 
+## Work Experience
+
+### Softsora — Associate Software Engineer (Current)
+**Duration:** August 2024 – Present (2 years)  
+**Type:** Full-time
+
+Joined as a Junior Software Engineer and progressed to Associate Software Engineer. Contributed to 6+ projects across agile development cycles. Key responsibilities include code review, client communication, system implementation, and maintaining coding standards across the engineering team.
+
+### Cyber Yakku — Backend Engineer
+**Duration:** Early experience (before Softsora)  
+**Type:** Collaborative / Team
+
+Worked with the Cyber Yakku team on software development for local Sri Lankan clients. Primary contribution was server-side development for a mobile application, serving as the Backend Engineer.
+
 ## Machine-Readable Data
 
 These endpoints provide structured, versioned JSON for AI systems and knowledge bases:
 
 - Full Profile: https://pasindusampath.com/api/v1/person
+- Work Experience: https://pasindusampath.com/api/v1/experience
 - Skills: https://pasindusampath.com/api/v1/skills
 - Services: https://pasindusampath.com/api/v1/services
 - Projects: https://pasindusampath.com/api/v1/projects
