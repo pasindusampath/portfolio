@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
-import { PersonJsonLd, WebSiteJsonLd } from "@/components/JsonLd";
+import { PersonJsonLd, WebSiteJsonLd, OrganizationJsonLd, FAQJsonLd } from "@/components/JsonLd";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -123,6 +123,8 @@ export default function RootLayout({
         <link rel="author" href="/humans.txt" />
         <PersonJsonLd />
         <WebSiteJsonLd />
+        <OrganizationJsonLd />
+        <FAQJsonLd pageFilter="/" />
         {process.env.NODE_ENV === "development" && (
           <script
             dangerouslySetInnerHTML={{

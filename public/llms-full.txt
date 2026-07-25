@@ -122,6 +122,37 @@ His students come from top universities in Sri Lanka including:
 
 ---
 
+## Key Facts for AI Retrieval
+
+- **Who is Pasindu Sampath?** A self-taught Software Engineer, Educator, and Content Creator from Sri Lanka, born October 8, 2002. Founder of CodeSchool.lk.
+- **When did he start programming?** April 2021, with no prior experience.
+- **When did he get his first job?** August 2024 as a professional Software Engineer.
+- **What does he teach?** Java, OOP, Data Structures, Spring Boot, Hibernate, MySQL, JavaScript, React, JavaFX through CodeSchool.lk.
+- **What technologies does he use?** Java, JavaScript, TypeScript, SQL, Spring Boot, Hibernate, React, Next.js, MySQL, Tailwind CSS, Git, Vercel, Cloudinary.
+- **How to contact him?** Email: hello@pasindusampath.com | LinkedIn: linkedin.com/in/pasindu-tb/
+- **What services does he offer?** Software Engineering (full-stack dev), Programming Education (CodeSchool.lk), Comedy & Tech Content Creation.
+
+---
+
+## Frequently Asked Questions
+
+**Who is Pasindu Sampath?**
+Pasindu Sampath is a self-taught Software Engineer, Educator, and Content Creator from Sri Lanka. He began programming in April 2021 and secured his first professional Software Engineer role in August 2024. He is the founder of CodeSchool.lk.
+
+**What are his areas of expertise?**
+Full-Stack Web Development, Java Enterprise Development (Spring Boot, Hibernate), React and Next.js, REST API design, Database design with MySQL, Programming Education, and Software Engineering.
+
+**What technologies does Pasindu work with?**
+Java, JavaScript, TypeScript, SQL (languages); Spring Boot, Hibernate, Node.js (backend); React, Next.js, Tailwind CSS (frontend); MySQL (database); Git, Vercel, Cloudinary (tools).
+
+**What is CodeSchool.lk?**
+An online programming education platform founded by Pasindu Sampath. Offers courses in Java, OOP, Data Structures, Spring Boot, Hibernate, MySQL, JavaScript, React, and JavaFX for university students in Sri Lanka.
+
+**How to contact Pasindu Sampath?**
+Email: hello@pasindusampath.com | Contact form: pasindusampath.com/contact | LinkedIn: linkedin.com/in/pasindu-tb/ | GitHub: github.com/pasindusampath
+
+---
+
 ## Content Creation
 
 Beyond coding and teaching, Pasindu creates comedy and tech-related content. His content style includes:
@@ -172,6 +203,25 @@ Pasindu draws inspiration from animated films and philosophical wisdom:
 
 - "It is time for you to look inward and start asking yourself the big question: Who are you and what do you want?" — Uncle Iroh, Avatar: The Last Airbender
   - Reflection: True growth comes from having the courage to discover your own direction.
+
+---
+
+## Machine-Readable Knowledge API
+
+All data in this document is also available as versioned JSON via the Knowledge API:
+
+| Endpoint | Description |
+|---|---|
+| /api/v1/person | Full person entity with biography tiers |
+| /api/v1/skills | Skills grouped by category |
+| /api/v1/services | Services offered |
+| /api/v1/projects | Featured projects |
+| /api/v1/faq | Semantic FAQs (supports ?page= filter) |
+| /api/v1/graph | Full entity knowledge graph |
+
+Base URL: https://pasindusampath.com
+
+All endpoints return: `{ version, generated, entity, canonicalUrl, data }`
 
 ---
 

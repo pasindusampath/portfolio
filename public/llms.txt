@@ -42,3 +42,20 @@ Pasindu teaches Java fundamentals, OOP, Data Structures, Spring Boot, Hibernate,
 - 2023-2024: Mastered databases and MySQL
 - August 2024: First professional Software Engineer role
 - 2024-Present: Growing through team collaboration and mentoring
+
+## Machine-Readable Data
+
+These endpoints provide structured, versioned JSON for AI systems and knowledge bases:
+
+- Full Profile: https://pasindusampath.com/api/v1/person
+- Skills: https://pasindusampath.com/api/v1/skills
+- Services: https://pasindusampath.com/api/v1/services
+- Projects: https://pasindusampath.com/api/v1/projects
+- FAQs: https://pasindusampath.com/api/v1/faq
+- Knowledge Graph: https://pasindusampath.com/api/v1/graph
+
+## Key Pages
+
+- [Home](https://pasindusampath.com): Overview of Pasindu's work, journey, and skills
+- [Projects](https://pasindusampath.com/projects): Portfolio of projects
+- [Contact](https://pasindusampath.com/contact): Contact form and email

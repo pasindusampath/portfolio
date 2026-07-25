@@ -1,102 +1,96 @@
-export function PersonJsonLd() {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: "Pasindu Sampath",
-    url: "https://pasindusampath.com",
-    image:
-      "https://res.cloudinary.com/dkrxyiio0/image/upload/v1784234154/portfolio/fpwitz2b2kkvnjiemzkc.png",
-    jobTitle: "Software Engineer",
-    description:
-      "Self-taught Software Engineer, Educator, and Content Creator from Sri Lanka. Founder of CodeSchool.lk.",
-    birthDate: "2002-10-08",
-    nationality: {
-      "@type": "Country",
-      name: "Sri Lanka",
-    },
-    knowsAbout: [
-      "Java",
-      "Spring Boot",
-      "Hibernate",
-      "JavaScript",
-      "TypeScript",
-      "React",
-      "Next.js",
-      "MySQL",
-      "Tailwind CSS",
-      "OOP",
-      "Data Structures",
-      "Software Engineering",
-    ],
-    sameAs: [
-      "https://github.com/pasindusampath",
-      "https://www.linkedin.com/in/pasindu-tb/",
-      "https://codeschool.lk",
-    ],
-    email: "hello@pasindusampath.com",
-    alumniOf: {
-      "@type": "Organization",
-      name: "CodeSchool.lk",
-      url: "https://codeschool.lk",
-    },
-    worksFor: {
-      "@type": "Organization",
-      name: "CodeSchool.lk",
-    },
-  };
+// components/JsonLd.tsx
+// JSON-LD structured data components — all generated from lib/schema/generate-schema.ts
+// which in turn reads from the canonical lib/data/* entity files.
 
+import {
+  generatePersonSchema,
+  generateWebSiteSchema,
+  generateBreadcrumbSchema,
+  generateFAQSchema,
+  generateProjectSchema,
+  generateWebPageSchema,
+  generateOrganizationSchema,
+} from "@/lib/schema/generate-schema";
+import type { ProjectEntity } from "@/lib/types/entities";
+
+function JsonLdScript({ data }: { data: object }) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
     />
   );
 }
+
+// ─── Person ───────────────────────────────────────────────
+
+export function PersonJsonLd() {
+  return <JsonLdScript data={generatePersonSchema()} />;
+}
+
+// ─── WebSite + SearchAction ───────────────────────────────
 
 export function WebSiteJsonLd() {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "Pasindu Sampath — Portfolio",
-    url: "https://pasindusampath.com",
-    description:
-      "Personal portfolio of Pasindu Sampath — Software Engineer, Educator & Content Creator from Sri Lanka.",
-    author: {
-      "@type": "Person",
-      name: "Pasindu Sampath",
-      url: "https://pasindusampath.com",
-    },
-    inLanguage: "en",
-  };
+  return <JsonLdScript data={generateWebSiteSchema()} />;
+}
 
+// ─── Organization ─────────────────────────────────────────
+
+export function OrganizationJsonLd() {
+  return <JsonLdScript data={generateOrganizationSchema()} />;
+}
+
+// ─── WebPage ──────────────────────────────────────────────
+
+export function WebPageJsonLd({
+  title,
+  description,
+  url,
+  datePublished,
+  dateModified,
+}: {
+  title: string;
+  description: string;
+  url: string;
+  datePublished?: string;
+  dateModified?: string;
+}) {
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    <JsonLdScript
+      data={generateWebPageSchema({
+        title,
+        description,
+        url,
+        datePublished,
+        dateModified,
+      })}
     />
   );
 }
+
+// ─── BreadcrumbList ───────────────────────────────────────
 
 export function BreadcrumbJsonLd({
   items,
 }: {
   items: { name: string; url: string }[];
 }) {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: items.map((item, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: item.name,
-      item: item.url,
-    })),
-  };
+  return <JsonLdScript data={generateBreadcrumbSchema(items)} />;
+}
 
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-    />
-  );
+// ─── FAQPage ──────────────────────────────────────────────
+
+/**
+ * Renders FAQ structured data for a specific page path.
+ * @param pageFilter - e.g. "/" for homepage FAQs, "/about" for about page FAQs.
+ *                     If omitted, renders all FAQs.
+ */
+export function FAQJsonLd({ pageFilter }: { pageFilter?: string }) {
+  return <JsonLdScript data={generateFAQSchema(pageFilter)} />;
+}
+
+// ─── Project (CreativeWork) ───────────────────────────────
+
+export function ProjectJsonLd({ project }: { project: ProjectEntity }) {
+  return <JsonLdScript data={generateProjectSchema(project)} />;
 }
