@@ -1,6 +1,6 @@
 # Content Governance Audit Report
 
-**Generated:** 2026-07-25T13:31:21.925Z  
+**Generated:** 2026-07-25T13:50:46.237Z  
 **Total Issues:** 0 (0 critical, 0 warnings, 0 info)
 
 ---

@@ -842,7 +842,7 @@ export default function Home() {
           className="max-w-2xl mx-auto mt-12 md:mt-16 text-center"
         >
           <blockquote className="text-gray-500 text-sm md:text-base italic border-l-2 border-amber-500/30 pl-4 py-1 inline-block text-left">
-            &quot;I write code that works (eventually), and content that makes people forget their code doesn&apos;t.&quot;
+            {`"I write code that works (eventually), and content that makes people forget their code doesn't."`}
           </blockquote>
         </motion.div>
       </section>

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import { PersonJsonLd, WebSiteJsonLd, OrganizationJsonLd, FAQJsonLd } from "@/components/JsonLd";
+import { ErudaDevTool } from "@/components/ErudaDevTool";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -125,22 +126,7 @@ export default function RootLayout({
         <WebSiteJsonLd />
         <OrganizationJsonLd />
         <FAQJsonLd pageFilter="/" />
-        {process.env.NODE_ENV === "development" && (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-                (function () {
-                  var script = document.createElement('script');
-                  script.src = "https://cdn.jsdelivr.net/npm/eruda";
-                  document.head.appendChild(script);
-                  script.onload = function () {
-                    eruda.init();
-                  }
-                })();
-              `,
-            }}
-          />
-        )}
+        {process.env.NODE_ENV === "development" && <ErudaDevTool />}
       </head>
       <body className={outfit.className} suppressHydrationWarning>
         {children}
